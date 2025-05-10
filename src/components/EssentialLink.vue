@@ -1,9 +1,9 @@
 <template>
   <q-item
     clickable
+    :to="isExternalLink ? undefined : link"
+    :target="isExternalLink ? '_blank' : undefined"
     tag="a"
-    target="_blank"
-    :href="link"
   >
     <q-item-section
       v-if="icon"
@@ -20,16 +20,19 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
 export interface EssentialLinkProps {
   title: string;
   caption?: string;
-  link?: string;
+  link?: string | object; // Handles string paths and route objects
   icon?: string;
-};
+}
 
-withDefaults(defineProps<EssentialLinkProps>(), {
-  caption: '',
-  link: '#',
-  icon: '',
+const props = defineProps<EssentialLinkProps>();
+
+const isExternalLink = computed(() => {
+  return typeof props.link === 'string' && props.link.startsWith('http');
 });
+
 </script>

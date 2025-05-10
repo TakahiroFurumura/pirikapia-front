@@ -4,8 +4,17 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    children: [
+      { path: '/', component: () => import('pages/IndexPage.vue') },
+      { path: 'user-profile', // This will be accessible at yoursite.com/profile
+        name: 'user-profile', // A unique name for this route (recommended)
+        component: () => import('pages/UserProfile.vue'),
+      },
+    ],
   },
+
+
+
 
   // Always leave this as last one,
   // but you can also remove it

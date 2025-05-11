@@ -1,5 +1,11 @@
 import { boot } from 'quasar/wrappers';
 import axios from 'axios';
+import { useAuthStore } from 'src/stores/auth' // Piniaストアのパス
+const authStore = useAuthStore();
+
+
+import { useRouter } from 'vue-router'
+const router = useRouter();
 
 // Create an Axios instance with a base URL (optional, but recommended)
 const api = axios.create({
@@ -8,7 +14,9 @@ const api = axios.create({
   // headers: { 'X-Custom-Header': 'foobar' }
 });
 
+authStore.initializeAuthFromLocalStorage()
 
+// request interceptor
 api.interceptors.request.use(req  => {
   console.log(req)
   return req;
@@ -16,13 +24,35 @@ api.interceptors.request.use(req  => {
   return Promise.reject(err);
 });
 
-// レスポンス受信後に行いたい処理の定義
+// response interceptor
 api.interceptors.response.use(res => {
-    console.log(res)
+    console.debug(res)
+
     return res;
-  }, err => {
+  }, async error => {
+      const originalRequest = error.config
+      // 401エラーで、かつ、まだリトライしていない場合
+      if (error.response && error.response.status === 401 && !originalRequest._retry) {
+        console.debug('retry after refreshing token', error.response.status, originalRequest._retry)
+        originalRequest._retry = true // リトライフラグを立てる
+        try {
+          // アクセストークンをリフレッシュ
+          const newAccessToken = await authStore.refreshAccessToken()
+          // リフレッシュ成功後、元のリクエストのヘッダーを更新して再実行
+          if (newAccessToken) {
+            console.debug('refreshed token', newAccessToken)
+            originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
+            return axios(originalRequest) // 元のリクエストを再試行
+          }
+        } catch (refreshError) {
+          // リフレッシュ失敗時 (authStore.refreshAccessToken内でログアウト処理が呼ばれるはず)
+          router.push('/login') // ここでリダイレクトも可能
+          console.error('Token refresh failed, redirecting to login.', refreshError)
+          return Promise.reject(refreshError)
+        }
+      }
     // ステータスコードが200系以外の場合に実行する処理
-    return Promise.reject(err);
+    return Promise.reject(error)
 });
 
 

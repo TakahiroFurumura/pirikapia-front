@@ -15,7 +15,12 @@
           Pirikapia
         </q-toolbar-title>
 
-        <div></div>
+        <q-item v-if="authStore.isAuthenticated">
+          <q-btn flat round dense icon="account_circle"><span class="q-ml-sm">{{authStore.user.username}}</span></q-btn>
+        </q-item>
+        <q-item v-if="!authStore.isAuthenticated" clickable to="user-login">
+          <q-btn flat round dense icon="login"><span class="q-ml-sm">Login</span></q-btn>
+        </q-item>
       </q-toolbar>
     </q-header>
 
@@ -42,7 +47,9 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-    <q-footer class="q-pa-xs">{{welcomeMessage}} </q-footer>
+    <q-footer class="q-pa-xs">
+      <span>{{welcomeMessage}}</span>
+      <span class="q-pa-xs" v-if="debug">(debug mode)</span> </q-footer>
   </q-layout>
 </template>
 
@@ -51,6 +58,12 @@ import { ref, onMounted } from 'vue';
 import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink.vue';
 import { api } from 'boot/axios';
 import axios from 'axios';
+
+import { useAuthStore } from 'stores/auth'
+const authStore = useAuthStore()
+
+import { useDebugStore } from "stores/debug";
+const debug = useDebugStore().isDebugMode
 
 const linksList: EssentialLinkProps[] = [
   {
@@ -146,8 +159,7 @@ onMounted(() => {
   fetchWelcomeMessage()
     .then()
     .catch(error => {console.log(error)})
-    .finally(() => {})
-  ;
+    .finally(() => {});
 });
 
 </script>

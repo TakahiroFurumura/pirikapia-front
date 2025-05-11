@@ -6,6 +6,10 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '/', component: () => import('pages/IndexPage.vue') },
+      { path: 'image-detail-view',
+        name: 'image-detail-view', // A unique name for this route (recommended)
+        component: () => import('pages/ImageDetailView.vue'),
+      },
       { path: 'user-profile', // This will be accessible at yoursite.com/profile
         name: 'user-profile', // A unique name for this route (recommended)
         component: () => import('pages/UserProfile.vue'),

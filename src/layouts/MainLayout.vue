@@ -70,7 +70,7 @@ const linksList: EssentialLinkProps[] = [
     title: 'Images and Movies',
     caption: 'post your beauties',
     icon: 'collections',
-    link: {name: 'image-detail-view'}
+    link: {name: 'home'}
   },
   {
     title: 'Novels',

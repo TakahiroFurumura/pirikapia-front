@@ -21,6 +21,10 @@ const routes: RouteRecordRaw[] = [
         name: 'user-login', // A unique name for this route (recommended)
         component: () => import('pages/UserLogin.vue'),
       },
+      { path: 'user-sign-up',
+        name: 'user-sign-up', // A unique name for this route (recommended)
+        component: () => import('pages/UserSignUp.vue'),
+      },
     ],
   },
 

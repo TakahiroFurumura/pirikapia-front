@@ -11,7 +11,7 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
+        <q-toolbar-title @click="router.push('/')">
           Pirikapia
         </q-toolbar-title>
 
@@ -62,19 +62,22 @@ import axios from 'axios';
 import { useAuthStore } from 'stores/auth'
 const authStore = useAuthStore()
 
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
 import { useDebugStore } from "stores/debug";
 const debug = useDebugStore().isDebugMode
 
 const linksList: EssentialLinkProps[] = [
   {
-    title: 'Images and Movies',
-    caption: 'post your beauties',
+    title: 'Images',
+    caption: 'browse beauties',
     icon: 'collections',
     link: {name: 'home'}
   },
   {
     title: 'Novels',
-    caption: 'read and create',
+    caption: 'feel stories',
     icon: 'library_books',
     link: ''
   },
@@ -83,12 +86,6 @@ const linksList: EssentialLinkProps[] = [
     caption: '',
     icon: 'account_circle',
     link: {name: 'user-profile'}
-  },
-  {
-    title: 'X',
-    caption: 'follow @pirikapia',
-    icon: 'rss_feed',
-    link: 'https://x.com/otamoisutudio'
   },
   {
     title: 'About',

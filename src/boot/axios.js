@@ -18,7 +18,7 @@ authStore.initializeAuthFromLocalStorage()
 
 // request interceptor
 api.interceptors.request.use(req  => {
-  console.log(req)
+  console.log(req.url, req.method, req)
   return req;
 }, err => {
   return Promise.reject(err);

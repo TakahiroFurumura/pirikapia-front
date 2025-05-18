@@ -1,8 +1,8 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex">
     <q-card flat style="width: 400px; max-width: 90vw;">
       <q-card-section>
-        <div class="text-h6 q-mb-md">Login</div>
+        <div class="text-h5 q-mb-md">Login or <a class="" @click="redirectToSignUp">sing up</a></div>
         <q-form @submit.prevent="handleLogin">
           <q-input
             v-model="email"
@@ -11,7 +11,7 @@
             filled
             lazy-rules
             :rules="[val => !!val || 'Email is required', val => /.+@.+\..+/.test(val) || 'Invalid email']"
-            class="q-mb-md"
+            class="q-mb-sm"
           />
           <q-input
             v-model="password"
@@ -20,13 +20,14 @@
             filled
             lazy-rules
             :rules="[val => !!val || 'Password is required']"
-            class="q-mb-md"
+            class="q-mb-sm"
           />
           <q-banner v-if="errorMessage" inline-actions class="text-white bg-red q-mb-md">
             {{ errorMessage }}
           </q-banner>
           <div>
             <q-btn label="Login" type="submit" color="primary" :loading="loading" class="full-width"/>
+            <a class="" @click="redirectToResetPassword">reset password</a>
           </div>
         </q-form>
       </q-card-section>
@@ -57,6 +58,7 @@ const handleLogin = async () => {
   try {
     // Piniaストアのloginアクションを呼び出し
     await authStore.login({
+      email: email.value,
       username: email.value,
       password: password.value,
     });
@@ -114,4 +116,15 @@ const handleLogin = async () => {
     loading.value = false;
   }
 };
+
+const redirectToSignUp = () => {
+  router.push('user-sign-up')
+    .catch(err => console.log(err));
+}
+
+const redirectToResetPassword = () => {
+  router.push('user-sign-up')
+    .catch(err => console.log(err));
+}
+
 </script>

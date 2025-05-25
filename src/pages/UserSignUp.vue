@@ -35,7 +35,7 @@
             {{ errorMessage }}
           </q-banner>
           <div>
-            <q-btn label="Login" type="submit" color="primary" :loading="loading" class="full-width"/>
+            <q-btn label="Sign up" type="submit" color="primary" :loading="loading" class="full-width"/>
           </div>
         </q-form>
       </q-card-section>
@@ -88,7 +88,17 @@ const handleSignUp = async () => {
         }
       })
       .catch((error) => {
-        console.log(error.response.data);
+        console.log(error)
+        errorMessage.value = 'Failed to create a new account. '
+        if (error.response.data.email !== undefined) {
+          errorMessage.value += error.response.data.email + ' '
+        }
+        if (error.response.data.password !== undefined) {
+          errorMessage.value += error.response.data.password + ' '
+        }
+        if (error.response.data.username !== undefined) {
+          errorMessage.value += error.response.data.username + ' '
+        }
       })
       .finally()
 

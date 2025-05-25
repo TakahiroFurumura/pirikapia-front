@@ -25,6 +25,10 @@ const routes: RouteRecordRaw[] = [
         name: 'user-sign-up', // A unique name for this route (recommended)
         component: () => import('pages/UserSignUp.vue'),
       },
+      { path: 'user-email-confirmation',
+        name: 'user-email-confirmation', // A unique name for this route (recommended)
+        component: () => import('pages/UserEmailConfirmation.vue'),
+      },
     ],
   },
 

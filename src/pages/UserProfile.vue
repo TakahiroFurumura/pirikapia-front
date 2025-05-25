@@ -33,7 +33,7 @@ const handleLogout = async () => {
 
 onMounted(() => {
   if (!useAuthStore().isAuthenticated) {
-    router.push("/login")
+    router.push("user-login")
       .catch(err => console.error(err))
   }
 })

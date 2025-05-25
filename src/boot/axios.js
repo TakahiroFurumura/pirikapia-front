@@ -18,16 +18,16 @@ authStore.initializeAuthFromLocalStorage()
 
 // request interceptor
 api.interceptors.request.use(req  => {
-  console.log(req.url, req.method, req)
+  console.debug(req.url, req.method, req)
   return req;
 }, err => {
   return Promise.reject(err);
 });
 
 // response interceptor
-api.interceptors.response.use(res => {
+api.interceptors.response.use(
+  res => {
     console.debug(res)
-
     return res;
   }, async error => {
       const originalRequest = error.config
@@ -50,8 +50,10 @@ api.interceptors.response.use(res => {
           console.error('Token refresh failed, redirecting to login.', refreshError)
           return Promise.reject(refreshError)
         }
+      } else {
+        console.debug(error.request.responseURL, error.status, error)
       }
-    // ステータスコードが200系以外の場合に実行する処理
+      // ステータスコードが200系以外の場合に実行する処理
     return Promise.reject(error)
 });
 

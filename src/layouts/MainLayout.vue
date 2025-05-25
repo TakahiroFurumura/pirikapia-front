@@ -15,8 +15,10 @@
           Pirikapia
         </q-toolbar-title>
 
-        <q-item v-if="authStore.isAuthenticated">
-          <q-btn flat round dense icon="account_circle"><span class="q-ml-sm">{{authStore.user.username}}</span></q-btn>
+        <q-item v-if="authStore.isAuthenticated" clickable @click="router.push('user-profile')">
+          <q-btn flat round dense icon="account_circle">
+            <span class="q-ml-sm">{{authStore.user.username}}</span>
+          </q-btn>
         </q-item>
         <q-item v-if="!authStore.isAuthenticated" clickable @click="router.push('user-login')">
           <q-btn flat round dense icon="login"><span class="q-ml-sm">Login</span></q-btn>

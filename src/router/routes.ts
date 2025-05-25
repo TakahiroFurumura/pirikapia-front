@@ -29,6 +29,10 @@ const routes: RouteRecordRaw[] = [
         name: 'user-email-confirmation', // A unique name for this route (recommended)
         component: () => import('pages/UserEmailConfirmation.vue'),
       },
+      { path: 'password-reset',
+        name: 'password-reset', // A unique name for this route (recommended)
+        component: () => import('pages/UserPasswordReset.vue'),
+      },
     ],
   },
 
@@ -41,6 +45,7 @@ const routes: RouteRecordRaw[] = [
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
   },
+
 ];
 
 export default routes;

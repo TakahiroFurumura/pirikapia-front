@@ -27,8 +27,29 @@
           </q-banner>
           <div>
             <q-btn label="Login" type="submit" color="primary" :loading="loading" class="full-width"/>
-            <a class="" @click="redirectToResetPassword">reset password</a>
           </div>
+
+        </q-form>
+      </q-card-section>
+
+      <q-card-section class="q-my-lg">
+        <q-banner class="q-my-none q-py-none q-px-none">Forgot password?</q-banner>
+        <q-form @submit.prevent="sendPasswordResetEmail">
+          <q-input
+            v-model="email"
+            label="Email"
+            type="email"
+            filled
+            lazy-rules
+            :rules="[val => !!val || 'Email is required', val => /.+@.+\..+/.test(val) || 'Invalid email']"
+            class="q-mb-sm"
+          />
+          <div>
+            <q-btn label="Send email to reset password" type="submit" color="primary" :loading="loading" class="full-width"/>
+          </div>
+          <q-banner v-if="passwordResetMessage" inline-actions class="text-white bg-red q-mb-md">
+            {{ passwordResetMessage }}
+          </q-banner>
         </q-form>
       </q-card-section>
     </q-card>
@@ -40,12 +61,14 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from 'src/stores/auth'
 import { useQuasar } from 'quasar'
+import { api } from 'boot/axios'
 import { AxiosError } from 'axios'; // AxiosError の型をインポート
 
 const email = ref('');
 const password = ref('');
 const loading = ref(false);
 const errorMessage = ref('');
+const passwordResetMessage = ref('');
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -122,8 +145,16 @@ const redirectToSignUp = () => {
     .catch(err => console.log(err));
 }
 
-const redirectToResetPassword = () => {
-  router.push('user-sign-up')
+const sendPasswordResetEmail = () => {
+  console.debug("sendPasswordResetEmail");
+  api.post(
+    "auth/password/reset/",
+    {"email": email.value},
+  )
+    .then(res => {
+      console.debug(res);
+      passwordResetMessage.value = "Email to reset your password was sent. Please check your mailbox."
+    })
     .catch(err => console.log(err));
 }
 

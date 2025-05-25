@@ -1,5 +1,5 @@
 <template>
-  <q-card flat class="q-ma-none q-pa-none">
+  <q-card flat class="q-ma-none q-pa-none" style="cursor: pointer;">
     <q-img
       :src="props.signed_url"
       :ratio="1/1"

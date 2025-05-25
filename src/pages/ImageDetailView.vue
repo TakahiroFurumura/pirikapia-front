@@ -11,7 +11,7 @@
       <div
         v-if="imageData?.requires_login"
         class="absolute-full text-subtitle1  flex flex-center"
-        style="background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
+        style="cursor: pointer; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
         @click="router.push('/user-login')"
       >
         <span class="">Login to unlock</span>

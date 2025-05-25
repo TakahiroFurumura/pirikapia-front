@@ -4,12 +4,20 @@
       :src="props.signed_url"
       :ratio="1/1"
       @click="navigateToDetail"
+      style="position: relative;"
     >
       <template v-slot:error>
         <div class="absolute-full flex flex-center bg-negative text-white">
-          画像を読み込めません
+          Failed to load...
         </div>
       </template>
+      <div
+        v-if="requires_login"
+        class="absolute-bottom text-center"
+        style="background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
+      >
+        <span class="text-caption">Login to unlock</span>
+      </div>
     </q-img>
     <q-separator/>
     <q-card-actions align="left" class="q-mx-none q-pa-none q-my-none">
@@ -32,6 +40,7 @@ export interface ThumbnailProps {
   title: string | undefined;
   favorite_count: number | undefined;
   comment_count: number | undefined;
+  requires_login: boolean | undefined;
 }
 const props = withDefaults(defineProps<ThumbnailProps>(), {
   title: '',

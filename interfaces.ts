@@ -14,4 +14,5 @@ export interface APIResponseImage {
   signed_url: string; // 画像への署名付きURL
   owner_username: string;
   owner_first_name: string | undefined;
+  requires_login: boolean | undefined;
 }

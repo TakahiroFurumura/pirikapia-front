@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from 'src/stores/auth'
 import { useQuasar } from 'quasar'
@@ -158,4 +158,9 @@ const sendPasswordResetEmail = () => {
     .catch(err => console.log(err));
 }
 
+onMounted(() => {
+  if (authStore.isAuthenticated ) {
+    void router.push('user-profile')
+  }
+})
 </script>

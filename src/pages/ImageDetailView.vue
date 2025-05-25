@@ -6,7 +6,18 @@
       :src="imageData?.signed_url"
       spinner-color="white"
       style="max-width: 1024px"
-    ></q-img>
+    >
+
+      <div
+        v-if="imageData?.requires_login"
+        class="absolute-full text-subtitle1  flex flex-center"
+        style="background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
+        @click="router.push('/user-login')"
+      >
+        <span class="">Login to unlock</span>
+      </div>
+
+    </q-img>
       <q-card-section class="text-caption">
         <q-list dense>
           <li>{{imageData?.filename}}</li>
@@ -22,7 +33,8 @@
 import { ref, onMounted, watch } from 'vue';
 import type { APIResponseImage } from "app/interfaces";
 import { api } from 'boot/axios.js'
-// import { useRoute } from 'vue-router'; // props: true を使う場合は必須ではない
+import { useRouter } from 'vue-router'
+const router = useRouter();
 
 // --- Propsの定義 ---
 // ルートパラメータ名 (imageId) と同じ名前でpropsを定義します。

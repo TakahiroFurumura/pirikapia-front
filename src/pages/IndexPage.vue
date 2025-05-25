@@ -31,6 +31,7 @@
           :title="item.title"
           :favorite_count="item.favorite_count"
           :comment_count="item.comment_count"
+          :requires_login="item.requires_login"
         />
       </div>
     </div>
@@ -67,6 +68,7 @@ const fetchThumbnails = async () => {
             title: '',
             favorite_count: 0,
             comment_count: 0,
+            requires_login: rawItem.requires_login,
           }
         })
       })

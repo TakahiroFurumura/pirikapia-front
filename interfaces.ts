@@ -15,4 +15,6 @@ export interface APIResponseImage {
   owner_username: string;
   owner_first_name: string | undefined;
   requires_login: boolean | undefined;
+  tags: object;
 }
+

@@ -18,6 +18,11 @@
       </div>
 
     </q-img>
+      <q-card-section v-if="tags.length>0">
+        <q-chip color="primary" text-color="white" v-for="tag in tags" :key="tag">
+          {{tag.replace(/_/g, ' ')}}
+        </q-chip>
+      </q-card-section>
       <q-card-section class="text-caption">
         <q-list dense>
           <li>{{imageData?.filename}}</li>
@@ -47,12 +52,15 @@ const props = defineProps<Props>();
 const imageData = ref<APIResponseImage | null>(null); // APIから取得する画像データの型に合わせてください
 const loading = ref<boolean>(false);
 const error = ref<Error | null>(null);
+const tags = ref<string[]>([]);
+
 
 // --- APIから画像詳細を取得する関数 (仮) ---
 const fetchImageDetails = async () => {
   await api.get(`images/hashid/${props.imageId}/`)
     .then((response) => {
       imageData.value = response.data
+      tags.value = Object.keys(response.data.tags)
     })
     .catch((error) => {
       console.log(error);

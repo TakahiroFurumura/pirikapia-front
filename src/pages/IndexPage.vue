@@ -56,7 +56,7 @@ const fetchThumbnails = async () => {
   error.value = null;
   try {
     // --- 実際のAPI呼び出しの例
-    await api.get("https://api.pirikapia.com/images/random-thumbnails/50/")
+    await api.get("https://api.pirikapia.com/images/random-thumbnails/20/")
       .then(response => {
         const rawItems = response.data as APIResponseImage[];
         imageItems.value = rawItems.map((rawItem: APIResponseImage): ThumbnailProps => {

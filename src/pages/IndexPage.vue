@@ -2,7 +2,7 @@
   <q-page class="q-pa-md">
     <div v-if="loading" class="text-center">
       <q-spinner-gears size="50px" color="primary" />
-      <p>データを読み込んでいます...</p>
+      <p>Loading...</p>
     </div>
 
     <div v-if="error" class="text-negative text-center">

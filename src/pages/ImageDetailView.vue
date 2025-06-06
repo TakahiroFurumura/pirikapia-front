@@ -19,9 +19,11 @@
 
     </q-img>
       <q-card-section v-if="tags.length>0">
-        <q-chip color="primary" text-color="white" v-for="tag in tags" :key="tag">
-          {{tag.replace(/_/g, ' ')}}
-        </q-chip>
+          <q-chip color="primary" text-color="white" v-for="tag in tags" :key="tag">
+            <router-link :to=tagSearchLink(tag) style="text-decoration: none; color: white" >
+              {{tag.replace(/_/g, ' ')}}
+            </router-link>
+          </q-chip>
       </q-card-section>
       <q-card-section class="text-caption">
         <q-list dense>
@@ -54,6 +56,9 @@ const loading = ref<boolean>(false);
 const error = ref<Error | null>(null);
 const tags = ref<string[]>([]);
 
+function tagSearchLink(tag: string) {
+  return `/?tag=${tag}`;
+}
 
 // --- APIから画像詳細を取得する関数 (仮) ---
 const fetchImageDetails = async () => {

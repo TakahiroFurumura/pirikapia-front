@@ -44,7 +44,8 @@ import { api } from 'boot/axios.js'
 import ImageThumbnail from 'components/ImageThumbnail.vue'; // 子コンポーネントのパスを正しく指定してください
 import type { ThumbnailProps } from 'components/ImageThumbnail.vue';
 import type { APIResponseImage } from "app/interfaces";
-
+import { useRoute } from "vue-router";
+const route = useRoute();
 const imageItems = ref<ThumbnailProps[]>([]);
 const loading = ref<boolean>(true);
 const error = ref<Error | null>(null);
@@ -52,11 +53,18 @@ const error = ref<Error | null>(null);
 
 // APIからデータを取得する想定の関数
 const fetchThumbnails = async () => {
+  console.debug("url query parameters", route.query);
   loading.value = true;
   error.value = null;
   try {
-    // --- 実際のAPI呼び出しの例
-    await api.get("https://api.pirikapia.com/images/random-thumbnails/20/")
+    let url = ""
+    if (route.query.tag) {
+      const tag = typeof route.query.tag == "string" ? route.query.tag  : route.query.tag[0]
+      url = `https://api.pirikapia.com/images/search/?tag=${tag}`
+    } else {
+      url = "https://api.pirikapia.com/images/random-thumbnails/20/"
+    }
+    await api.get(url)
       .then(response => {
         const rawItems = response.data as APIResponseImage[];
         imageItems.value = rawItems.map((rawItem: APIResponseImage): ThumbnailProps => {

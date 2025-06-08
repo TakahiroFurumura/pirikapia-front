@@ -1,24 +1,25 @@
 <template>
   <q-card flat class="q-ma-none q-pa-none" style="cursor: pointer;">
-    <q-img
-      :src="props.signed_url"
-      :ratio="1/1"
-      @click="navigateToDetail"
-      style="position: relative;"
-    >
-      <template v-slot:error>
-        <div class="absolute-full flex flex-center bg-negative text-white">
-          Failed to load...
-        </div>
-      </template>
-      <div
-        v-if="requires_login"
-        class="absolute-bottom text-center"
-        style="background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
+    <router-link :to=linkToDetail()>
+      <q-img
+        :src="props.signed_url"
+        :ratio="1/1"
+        style="position: relative;"
       >
-        <span class="text-caption">Login to unlock</span>
-      </div>
-    </q-img>
+        <template v-slot:error>
+          <div class="absolute-full flex flex-center bg-negative text-white">
+            Failed to load...
+          </div>
+        </template>
+        <div
+          v-if="requires_login"
+          class="absolute-bottom text-center"
+          style="background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
+        >
+          <span class="text-caption">Login to unlock</span>
+        </div>
+      </q-img>
+    </router-link>
     <q-separator/>
     <q-card-actions align="left" class="q-mx-none q-pa-none q-my-none">
       <q-btn flat round size="sm" color="primary" icon="favorite_border" class="q-ml-none"> {{ props.favorite_count }}</q-btn>
@@ -29,8 +30,8 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-const router =useRouter();
+// import { useRouter } from 'vue-router';
+// const router =useRouter();
 
 export interface ThumbnailProps {
   filename: string;
@@ -49,10 +50,10 @@ const props = withDefaults(defineProps<ThumbnailProps>(), {
 });
 // const props = defineProps<Props>();
 
-const navigateToDetail = () => {
-  router.push({ name: 'image-detail-view', params: { imageId: props.image_id } })
-    .catch( (err: Error) => { console.log(err) })
+function linkToDetail() {
+  return `/image-detail-view/${props.image_id}`;
 }
+
 
 </script>
 

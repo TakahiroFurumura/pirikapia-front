@@ -18,3 +18,15 @@ export interface APIResponseImage {
   tags: object;
 }
 
+export function apiResponseToThumbnailProps(rawData: APIResponseImage) {
+  return {
+    filename: rawData.filename,
+    image_id: rawData.image_id,
+    signed_url: rawData.signed_url,
+    owner_username: rawData.owner_username,
+    title: '',
+    favorite_count: 0,
+    comment_count: 0,
+    requires_login: rawData.requires_login,
+  }
+}

@@ -22,16 +22,20 @@
     </router-link>
     <q-separator/>
     <q-card-actions align="left" class="q-mx-none q-pa-none q-my-none">
-      <q-btn flat round size="sm" color="primary" icon="favorite_border" class="q-ml-none"> {{ props.favorite_count }}</q-btn>
-      <q-btn flat round size="sm" color="primary" icon="comment" class="q-ml-sm"> {{ props.comment_count }}</q-btn>
+      <q-btn flat round size="md" :color="favoriteColor" :icon="favoriteIcon" class="q-ml-none" @click="addToBookmark"> {{ favoriteCount }}</q-btn>
+      <q-btn flat round size="md" color="primary" icon="comment" class="q-ml-sm"> {{ props.comment_count }}</q-btn>
       <div class="text-caption q-ml-sm">by {{ props.owner_username }}</div>
     </q-card-actions>
   </q-card>
 </template>
 
 <script setup lang="ts">
-// import { useRouter } from 'vue-router';
-// const router =useRouter();
+import { useRouter } from 'vue-router';
+const router =useRouter();
+import { useAuthStore } from 'stores/auth'
+const authStore = useAuthStore()
+import { api } from 'boot/axios.js'
+import {computed, ref, onMounted} from "vue";
 
 export interface ThumbnailProps {
   filename: string;
@@ -42,18 +46,46 @@ export interface ThumbnailProps {
   favorite_count: number | undefined;
   comment_count: number | undefined;
   requires_login: boolean | undefined;
+  bookmark: boolean | undefined;
 }
 const props = withDefaults(defineProps<ThumbnailProps>(), {
   title: '',
   favorite_count: 0,
   comment_count: 0,
 });
-// const props = defineProps<Props>();
+
+// const isMyFavorite = ref(false);
+
+const favoriteCount = computed(() => {return props.favorite_count + (isMyBookmark.value ? 1 : 0)});
+// reactive fav
+const isMyBookmark = ref<boolean>(false);
+const favoriteIcon = computed(() => {return  isMyBookmark.value ? "favorite" : "favorite_border"})
+const favoriteColor = computed(() => {return isMyBookmark.value ? "pink" : "primary"})
 
 function linkToDetail() {
   return `/image-detail-view/${props.image_id}`;
 }
 
+function addToBookmark() {
+  if (isMyBookmark.value) {
+    return
+  }
+  console.debug(`toggleBookmark ${props.filename} ${authStore.user}`);
+  if (authStore.isAuthenticated) {
+    api.post(`images/bookmark/${props.image_id}/`,{})
+      .then((res) => {
+        console.debug(`${res.status} ${props.filename} was added to ${authStore.user.username} bookmark.`)
+        isMyBookmark.value = true;
+      })
+      .catch((err) => {console.error(err.message);})
+  } else {
+    void router.push('/user-login')
+  }
+}
+
+onMounted(() => {
+  isMyBookmark.value = props.bookmark;
+})
 
 </script>
 

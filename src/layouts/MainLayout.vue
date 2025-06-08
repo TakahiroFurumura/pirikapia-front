@@ -82,6 +82,12 @@ const linksList: EssentialLinkProps[] = [
     link: ''
   },
   {
+    title: 'Image bookmarks',
+    caption: '',
+    icon: 'bookmark',
+    link: {name: 'image-bookmarks'}
+  },
+  {
     title: 'Your profile',
     caption: '',
     icon: 'account_circle',

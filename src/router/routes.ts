@@ -13,6 +13,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/ImageDetailView.vue'),
         props: true
       },
+      { path: 'image-bookmarks',
+        name: 'image-bookmarks',
+        component: () => import('pages/ImageBookmarks.vue'),
+      },
       { path: 'user-profile', // This will be accessible at yoursite.com/profile
         name: 'user-profile', // A unique name for this route (recommended)
         component: () => import('pages/UserProfile.vue'),

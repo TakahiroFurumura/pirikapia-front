@@ -66,24 +66,15 @@ const fetchThumbnails = async () => {
   loading.value = true;
   error.value = null;
   try {
-    let url = ""
-    if (route.query.tag) {
-      const tag = typeof route.query.tag == "string" ? route.query.tag  : route.query.tag[0]
-      url = `https://api.pirikapia.com/images/search/?tag=${tag}`
-    } else {
-      url = "https://api.pirikapia.com/images/random-thumbnails/24/"
-    }
-    await api.get(url)
+
+    await api.get("/images/bookmark/")
       .then(response => {
         const rawItems = response.data as APIResponseImage[];
         imageItems.value = rawItems.map((rawItem: APIResponseImage): ThumbnailProps => {
           return apiResponseToThumbnailProps(rawItem)
         })
       })
-      .catch(error => {
-        console.log(error);
-      })
-
+    // await new Promise(resolve => setTimeout(resolve, 1000)); // ネットワーク遅延のシミュレーション
   } catch (e) {
     console.error('Failed to fetch image data:', e);
     if (e instanceof Error) {

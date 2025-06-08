@@ -16,6 +16,8 @@ export interface APIResponseImage {
   owner_first_name: string | undefined;
   requires_login: boolean | undefined;
   tags: object;
+  bookmark: boolean;
+  bookmark_folder: string | undefined;
 }
 
 export function apiResponseToThumbnailProps(rawData: APIResponseImage) {
@@ -28,5 +30,6 @@ export function apiResponseToThumbnailProps(rawData: APIResponseImage) {
     favorite_count: 0,
     comment_count: 0,
     requires_login: rawData.requires_login,
+    bookmark: rawData.bookmark,
   }
 }

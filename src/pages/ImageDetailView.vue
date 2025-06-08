@@ -16,6 +16,12 @@
           <span class="">Login to unlock</span>
         </div>
       </q-img>
+
+      <q-card-actions align="left" class="q-mx-none q-pa-none q-my-none">
+        <q-btn flat round size="md" :color="favoriteColor" :icon="favoriteIcon" class="q-ml-none" @click="addToBookmark"> {{ favoriteCount }}</q-btn>
+        <q-btn flat round size="md" color="primary" icon="comment" class="q-ml-sm"> {{ commentCount }}</q-btn>
+        <div class="text-caption q-ml-sm">by {{ owner_username }}</div>
+      </q-card-actions>
       <q-card-section v-if="tags.length>0">
           <q-chip color="primary" text-color="white" v-for="tag in tags" :key="tag"  class="q-mx-xs q-px-sm">
             <router-link :to=tagSearchLink(tag) style="text-decoration: none; color: white" >
@@ -47,6 +53,7 @@
           :favorite_count="item.favorite_count"
           :comment_count="item.comment_count"
           :requires_login="item.requires_login"
+          :bookmark="item.bookmark"
         />
       </div>
     </div>
@@ -60,6 +67,8 @@
 import { ref, onMounted, watch, computed} from 'vue';
 import type { APIResponseImage } from "app/interfaces";
 import {apiResponseToThumbnailProps} from "app/interfaces";
+import { useAuthStore } from 'stores/auth'
+const authStore = useAuthStore()
 import { api } from 'boot/axios.js'
 import { useRouter } from 'vue-router'
 import ImageThumbnail from "components/ImageThumbnail.vue";
@@ -85,11 +94,20 @@ const tags = ref<string[]>([]);
 const createdOnDate = computed(() => {
   return imageData.value?.created_on ? dateFormatter.format(new Date(imageData.value?.created_on)) : ""
 })
+const favoriteCount = computed(() => {return 0 + (isMyBookmark.value ? 1 : 0)})
+const commentCount = computed(() => {return 0})
+const owner_username = computed(() => {return imageData.value !== null ? imageData.value.owner_username : ""})
+// reactive fav
+const isMyBookmark = ref<boolean>(false);
+const favoriteIcon = computed(() => {return  isMyBookmark.value ? "favorite" : "favorite_border"})
+const favoriteColor = computed(() => {return isMyBookmark.value ? "pink" : "primary"})
 
 
 function tagSearchLink(tag: string) {
   return `/?tag=${tag}`;
 }
+
+
 
 // --- APIから画像詳細を取得する関数 (仮) ---
 const fetchImageDetails = async () => {
@@ -97,6 +115,7 @@ const fetchImageDetails = async () => {
     .then((response) => {
       imageData.value = response.data
       tags.value = Object.keys(response.data.tags)
+      isMyBookmark.value = response.data.bookmark
     })
     .catch((error) => {
       console.log(error);
@@ -156,6 +175,25 @@ const fetchSimilarImages = async () => {
   }
 };
 
+function addToBookmark() {
+  if (isMyBookmark.value) {
+    return
+  }
+  if (imageData.value !== null) {
+    console.debug(`toggleBookmark ${imageData.value.filename} ${authStore.user}`);
+    if (authStore.isAuthenticated) {
+      api.post(`images/bookmark/${imageData.value.image_id}/`, {})
+        .then(() => {
+          console.debug(`added to ${authStore.user.username} bookmark.`)
+        })
+        .catch((err) => {
+          console.error(err.message);
+        })
+    } else {
+      void router.push('/user-login')
+    }
+  }
+}
 
 // --- ライフサイクルフック ---
 onMounted(() => {

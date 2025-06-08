@@ -7,9 +7,11 @@ const authStore = useAuthStore();
 import { useRouter } from 'vue-router'
 const router = useRouter();
 
+console.info(window.location.hostname)
+console.info(`use api base url ${window.location.hostname}`);
 // Create an Axios instance with a base URL (optional, but recommended)
 const api = axios.create({
-  baseURL: 'https://api.pirikapia.com', // Replace with your API's base URL
+  baseURL: window.location.hostname == "localhost" ? "http://127.0.0.1:8000" : "https://api.pirikapia.com", // Replace with your API's base URL
   // You can add other default settings here, like headers
   // headers: { 'X-Custom-Header': 'foobar' }
 });

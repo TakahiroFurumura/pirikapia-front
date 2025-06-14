@@ -34,10 +34,10 @@
           :signed_url="item.signed_url"
           :owner_username="item.owner_username"
           :title="item.title"
-          :favorite_count="item.favorite_count"
           :comment_count="item.comment_count"
           :requires_login="item.requires_login"
           :bookmark="item.bookmark"
+          :bookmark_count="item.bookmark_count"
         />
       </div>
     </div>
@@ -69,9 +69,9 @@ const fetchThumbnails = async () => {
     let url = ""
     if (route.query.tag) {
       const tag = typeof route.query.tag == "string" ? route.query.tag  : route.query.tag[0]
-      url = `https://api.pirikapia.com/images/search/?tag=${tag}`
+      url = `/images/search/?tag=${tag}`
     } else {
-      url = "https://api.pirikapia.com/images/random-thumbnails/24/"
+      url = "/images/random-thumbnails/24/"
     }
     await api.get(url)
       .then(response => {

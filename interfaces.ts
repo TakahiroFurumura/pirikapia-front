@@ -18,6 +18,7 @@ export interface APIResponseImage {
   tags: object;
   bookmark: boolean;
   bookmark_folder: string | undefined;
+  bookmark_count: number;
 }
 
 export function apiResponseToThumbnailProps(rawData: APIResponseImage) {
@@ -31,5 +32,6 @@ export function apiResponseToThumbnailProps(rawData: APIResponseImage) {
     comment_count: 0,
     requires_login: rawData.requires_login,
     bookmark: rawData.bookmark,
+    bookmark_count: rawData.bookmark_count,
   }
 }

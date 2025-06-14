@@ -3,9 +3,16 @@
     <q-card flat>
       <q-img
         :src="imageData?.signed_url"
-        spinner-color="white"
-        style="max-width: 1024px"
+        spinner-color="grey"
+        :ratio="aspectRatio"
+        spinner-size="82px"
+        style="position: relative;"
       >
+        <template v-slot:error>
+          <div class="absolute-full flex flex-center bg-negative text-white">
+            Failed to load...
+          </div>
+        </template>
 
         <div
           v-if="imageData?.requires_login"
@@ -38,7 +45,7 @@
     v-if="!loading && !error && similarImageItems.length > 0"
     class="row q-col-gutter-xs">
 
-    <div class="text-subtitle1 col-12">more like this</div>
+      <p class="text-subtitle1 col-12">more like this</p>
       <div
         v-for="(item,) in similarImageItems"
         :key="item.filename"
@@ -50,10 +57,10 @@
           :signed_url="item.signed_url"
           :owner_username="item.owner_username"
           :title="item.title"
-          :favorite_count="item.favorite_count"
           :comment_count="item.comment_count"
           :requires_login="item.requires_login"
           :bookmark="item.bookmark"
+          :bookmark_count="item.bookmark_count"
         />
       </div>
     </div>
@@ -97,6 +104,13 @@ const createdOnDate = computed(() => {
 const favoriteCount = computed(() => {return 0 + (isMyBookmark.value ? 1 : 0)})
 const commentCount = computed(() => {return 0})
 const owner_username = computed(() => {return imageData.value !== null ? imageData.value.owner_username : ""})
+const aspectRatio = computed(() => {
+  if (imageData.value !== null && imageData.value.width !== undefined && imageData.value.height !== undefined) {
+    return imageData.value.width / imageData.value.height;
+  } else {
+    return 1.0
+  }
+})
 // reactive fav
 const isMyBookmark = ref<boolean>(false);
 const favoriteIcon = computed(() => {return  isMyBookmark.value ? "favorite" : "favorite_border"})
@@ -111,7 +125,7 @@ function tagSearchLink(tag: string) {
 
 // --- APIから画像詳細を取得する関数 (仮) ---
 const fetchImageDetails = async () => {
-  await api.get(`images/hashid/${props.imageId}/`)
+  await api.get(`/images/hashid/${props.imageId}/`)
     .then((response) => {
       imageData.value = response.data
       tags.value = Object.keys(response.data.tags)
@@ -129,10 +143,9 @@ const loadImageDetails = async () => {
   imageData.value = null;
   try {
     // props.imageId を使ってAPIからデータを取得
-    const data = await fetchImageDetails();
-    console.log(data)
+    await fetchImageDetails();
   } catch (e) {
-    console.error('画像詳細の取得に失敗しました:', e);
+    console.error('Failed to load an image:', e);
     if (e instanceof Error) {
       error.value = e;
     } else {
@@ -182,7 +195,7 @@ function addToBookmark() {
   if (imageData.value !== null) {
     console.debug(`toggleBookmark ${imageData.value.filename} ${authStore.user}`);
     if (authStore.isAuthenticated) {
-      api.post(`images/bookmark/${imageData.value.image_id}/`, {})
+      api.post(`/images/bookmark/${imageData.value.image_id}/`, {})
         .then(() => {
           console.debug(`added to ${authStore.user.username} bookmark.`)
         })

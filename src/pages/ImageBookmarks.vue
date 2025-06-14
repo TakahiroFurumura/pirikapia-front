@@ -10,6 +10,15 @@
       <p>Loading...</p>
     </div>
 
+    <div class="raw">
+      <router-link to="/user-login">
+        <div v-if="!authStore.isAuthenticated">
+          Log in to view your bookmark
+        </div>
+      </router-link>
+    </div>
+
+    <div v-if="authStore.isAuthenticated">
     <div v-if="error" class="text-negative text-center">
       <p>failed to load images {{ error.message }}</p>
       <q-btn label="reload" color="primary" @click="fetchThumbnails" />
@@ -34,12 +43,13 @@
           :signed_url="item.signed_url"
           :owner_username="item.owner_username"
           :title="item.title"
-          :favorite_count="item.favorite_count"
           :comment_count="item.comment_count"
           :requires_login="item.requires_login"
           :bookmark="item.bookmark"
+          :bookmark_count="item.bookmark_count"
         />
       </div>
+    </div>
     </div>
   </q-page>
 </template>
@@ -51,11 +61,13 @@ import ImageThumbnail from 'components/ImageThumbnail.vue'; // 子コンポー�
 import type { ThumbnailProps } from 'components/ImageThumbnail.vue';
 import type { APIResponseImage, } from "app/interfaces";
 import { apiResponseToThumbnailProps } from "app/interfaces";
-import { useRoute } from "vue-router";
-const route = useRoute();
 const imageItems = ref<ThumbnailProps[]>([]);
 const loading = ref<boolean>(true);
 const error = ref<Error | null>(null);
+import { useAuthStore } from "stores/auth";
+const authStore = useAuthStore();
+import { useRoute } from "vue-router";
+const route = useRoute();
 
 const showSearchCondition = computed(() => {
   return typeof route.query.tag == "string"

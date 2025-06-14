@@ -22,7 +22,7 @@
     </router-link>
     <q-separator/>
     <q-card-actions align="left" class="q-mx-none q-pa-none q-my-none">
-      <q-btn flat round size="md" :color="favoriteColor" :icon="favoriteIcon" class="q-ml-none" @click="addToBookmark"> {{ favoriteCount }}</q-btn>
+      <q-btn flat round size="md" :color="favoriteColor" :icon="favoriteIcon" class="q-ml-none" @click="addToBookmark"> {{ bookmarkCount }}</q-btn>
       <q-btn flat round size="md" color="primary" icon="comment" class="q-ml-sm"> {{ props.comment_count }}</q-btn>
       <div class="text-caption q-ml-sm">by {{ props.owner_username }}</div>
     </q-card-actions>
@@ -43,20 +43,20 @@ export interface ThumbnailProps {
   signed_url: string;
   owner_username: string;
   title: string | undefined;
-  favorite_count: number | undefined;
   comment_count: number | undefined;
   requires_login: boolean | undefined;
   bookmark: boolean | undefined;
+  bookmark_count: number;
 }
 const props = withDefaults(defineProps<ThumbnailProps>(), {
   title: '',
-  favorite_count: 0,
+  bookmark_count: 0,
   comment_count: 0,
 });
 
 // const isMyFavorite = ref(false);
 
-const favoriteCount = computed(() => {return props.favorite_count + (isMyBookmark.value ? 1 : 0)});
+const bookmarkCount = computed(() => {return props.bookmark_count + (isMyBookmark.value ? 1 : 0)});
 // reactive fav
 const isMyBookmark = ref<boolean>(false);
 const favoriteIcon = computed(() => {return  isMyBookmark.value ? "favorite" : "favorite_border"})

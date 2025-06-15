@@ -1,31 +1,33 @@
 <template>
   <div class="q-pa-md q-gutter-sm">
     <q-card flat>
-      <q-img
-        :src="imageData?.signed_url"
-        spinner-color="grey"
-        :ratio="aspectRatio"
-        spinner-size="82px"
-        style="position: relative;"
-      >
-        <template v-slot:error>
-          <div class="absolute-full flex flex-center bg-negative text-white">
-            Failed to load...
-          </div>
-        </template>
-
-        <div
-          v-if="imageData?.requires_login"
-          class="absolute-full text-subtitle1  flex flex-center"
-          style="cursor: pointer; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
-          @click="router.push('/user-login')"
+      <a :href="imageLink" target="_blank">
+        <q-img
+          :src="imageData?.signed_url"
+          spinner-color="grey"
+          :ratio="aspectRatio"
+          spinner-size="82px"
+          style="position: relative;"
         >
-          <span class="">Login to unlock</span>
-        </div>
-      </q-img>
+          <template v-slot:error>
+            <div class="absolute-full flex flex-center bg-grey text-white">
+              Failed to load...
+            </div>
+          </template>
+
+          <div
+            v-if="imageData?.requires_login"
+            class="absolute-full text-subtitle1  flex flex-center"
+            style="cursor: pointer; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
+            @click="router.push('/user-login')"
+          >
+            <span class="">Login to unlock</span>
+          </div>
+        </q-img>
+      </a>
 
       <q-card-actions align="left" class="q-mx-none q-pa-none q-my-none">
-        <q-btn flat round size="md" :color="favoriteColor" :icon="favoriteIcon" class="q-ml-none" @click="addToBookmark"> {{ favoriteCount }}</q-btn>
+        <q-btn flat round size="md" :color="favoriteColor" :icon="favoriteIcon" class="q-ml-none" @click="addToBookmark"> {{ bookmarkCount }}</q-btn>
         <q-btn flat round size="md" color="primary" icon="comment" class="q-ml-sm"> {{ commentCount }}</q-btn>
         <div class="text-caption q-ml-sm">by {{ owner_username }}</div>
       </q-card-actions>
@@ -101,7 +103,6 @@ const tags = ref<string[]>([]);
 const createdOnDate = computed(() => {
   return imageData.value?.created_on ? dateFormatter.format(new Date(imageData.value?.created_on)) : ""
 })
-const favoriteCount = computed(() => {return 0 + (isMyBookmark.value ? 1 : 0)})
 const commentCount = computed(() => {return 0})
 const owner_username = computed(() => {return imageData.value !== null ? imageData.value.owner_username : ""})
 const aspectRatio = computed(() => {
@@ -111,11 +112,26 @@ const aspectRatio = computed(() => {
     return 1.0
   }
 })
+const imageLink = computed(() => {
+  if (imageData.value !== undefined && imageData.value !== null) {
+    return imageData.value.signed_url
+  } else {
+    return ""
+  }
+  }
+)
 // reactive fav
 const isMyBookmark = ref<boolean>(false);
-const favoriteIcon = computed(() => {return  isMyBookmark.value ? "favorite" : "favorite_border"})
-const favoriteColor = computed(() => {return isMyBookmark.value ? "pink" : "primary"})
-
+const justAddedToBookmark = ref<boolean>(false);
+const favoriteIcon = computed(() => {return  isMyBookmark.value || justAddedToBookmark.value || bookmarkCount.value > 0 ? "favorite" : "favorite_border"})
+const favoriteColor = computed(() => {return isMyBookmark.value || justAddedToBookmark.value ? "pink" : "primary"})
+const bookmarkCount = computed(() => {
+  if (imageData.value != undefined && imageData.value !== null) {
+      return imageData.value.bookmark_count + (justAddedToBookmark.value ? 1 : 0)
+    } else {
+      return 0
+    }
+});
 
 function tagSearchLink(tag: string) {
   return `/?tag=${tag}`;
@@ -198,6 +214,7 @@ function addToBookmark() {
       api.post(`/images/bookmark/${imageData.value.image_id}/`, {})
         .then(() => {
           console.debug(`added to ${authStore.user.username} bookmark.`)
+          justAddedToBookmark.value = true
         })
         .catch((err) => {
           console.error(err.message);

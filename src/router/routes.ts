@@ -17,6 +17,10 @@ const routes: RouteRecordRaw[] = [
         name: 'image-bookmarks',
         component: () => import('pages/ImageBookmarks.vue'),
       },
+      { path: 'auther-home', // This will be accessible at yoursite.com/profile
+        name: 'auther-home', // A unique name for this route (recommended)
+        component: () => import('pages/AutherHome.vue'),
+      },
       { path: 'user-profile', // This will be accessible at yoursite.com/profile
         name: 'user-profile', // A unique name for this route (recommended)
         component: () => import('pages/UserProfile.vue'),

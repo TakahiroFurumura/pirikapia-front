@@ -77,15 +77,21 @@ const linksList: EssentialLinkProps[] = [
   },
   {
     title: 'Novels',
-    caption: 'feel stories',
+    caption: 'stories of beauties',
     icon: 'library_books',
     link: ''
   },
   {
-    title: 'Image bookmarks',
+    title: 'Your bookmarks',
     caption: '',
     icon: 'bookmark',
     link: {name: 'image-bookmarks'}
+  },
+  {
+    title: 'Create novels',
+    caption: '',
+    icon: 'edit',
+    link: {name: 'auther-home'}
   },
   {
     title: 'Your profile',

@@ -7,7 +7,7 @@
         style="position: relative;"
       >
         <template v-slot:error>
-          <div class="absolute-full flex flex-center bg-negative text-white">
+          <div class="absolute-full flex flex-center bg-grey text-white">
             Failed to load...
           </div>
         </template>
@@ -56,10 +56,17 @@ const props = withDefaults(defineProps<ThumbnailProps>(), {
 
 // const isMyFavorite = ref(false);
 
-const bookmarkCount = computed(() => {return props.bookmark_count + (isMyBookmark.value ? 1 : 0)});
+const bookmarkCount = computed(() => {return props.bookmark_count + (justAddedToBookmark.value ? 1 : 0)});
+const justAddedToBookmark = ref<boolean>(false);
 // reactive fav
-const isMyBookmark = ref<boolean>(false);
-const favoriteIcon = computed(() => {return  isMyBookmark.value ? "favorite" : "favorite_border"})
+const isMyBookmark = computed(() => {
+  if (props.bookmark != undefined) {
+    return false
+  } else {
+    return props.bookmark
+  }
+  });
+const favoriteIcon = computed(() => {return  isMyBookmark.value || props.bookmark_count > 0 ? "favorite" : "favorite_border"})
 const favoriteColor = computed(() => {return isMyBookmark.value ? "pink" : "primary"})
 
 function linkToDetail() {
@@ -75,7 +82,7 @@ function addToBookmark() {
     api.post(`images/bookmark/${props.image_id}/`,{})
       .then((res) => {
         console.debug(`${res.status} ${props.filename} was added to ${authStore.user.username} bookmark.`)
-        isMyBookmark.value = true;
+        justAddedToBookmark.value = true;
       })
       .catch((err) => {console.error(err.message);})
   } else {
@@ -84,7 +91,6 @@ function addToBookmark() {
 }
 
 onMounted(() => {
-  isMyBookmark.value = props.bookmark;
 })
 
 </script>

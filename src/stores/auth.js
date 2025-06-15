@@ -48,6 +48,7 @@ export const useAuthStore = defineStore('authStore', {
       } else {
         this.refreshToken = null;
         localStorage.removeItem('refreshToken');
+        console.log('refreshToken was not given, removed existing refreshToken from localStorage.')
       }
 
       if (userData) {
@@ -77,8 +78,8 @@ export const useAuthStore = defineStore('authStore', {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
-
       delete api.defaults.headers.common['Authorization'];
+      console.log('authentication date was deleted from localStorage and api Authorization header')
     },
 
     /**

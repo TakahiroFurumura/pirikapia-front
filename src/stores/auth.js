@@ -162,8 +162,8 @@ export const useAuthStore = defineStore('authStore', {
         return Promise.reject('No refresh token available.');
       }
       try {
-        const response = await api.post(`/auth/refresh`, {
-          refreshToken: this.refreshToken,
+        const response = await api.post(`/auth/token/refresh/`, {
+          refresh: this.refreshToken,
         });
         const { accessToken, user } = response.data; // APIによっては新しいリフレッシュトークンも返る
         // const newRefreshToken = response.data.newRefreshToken || this.refreshToken; // 新しいリフレッシュトークンがある場合

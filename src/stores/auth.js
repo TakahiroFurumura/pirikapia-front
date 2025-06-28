@@ -161,19 +161,21 @@ export const useAuthStore = defineStore('authStore', {
         await this.logout();
         return Promise.reject('No refresh token available.');
       }
-      try {
-        const response = await api.post(`/auth/token/refresh/`, {
-          refresh: this.refreshToken,
-        });
-        const { accessToken, user } = response.data; // APIによっては新しいリフレッシュトークンも返る
-        // const newRefreshToken = response.data.newRefreshToken || this.refreshToken; // 新しいリフレッシュトークンがある場合
-        this._setAuthData(accessToken, this.refreshToken, user || this.user); // user情報は任意で更新
-        return Promise.resolve(accessToken);
-      } catch (error) {
-        console.error('Failed to refresh access token:', error);
-        await this.logout(); // リフレッシュ失敗時はログアウト
-        return Promise.reject(error);
-      }
+      await api.post(`/auth/token/refresh/`, {
+        refresh: this.refreshToken,
+      })
+        .then((response) => {
+          const { accessToken, user } = response.data; // APIによっては新しいリフレッシュトークンも返る
+          // const newRefreshToken = response.data.newRefreshToken || this.refreshToken; // 新しいリフレッシュトークンがある場合
+          this._setAuthData(accessToken, this.refreshToken, user || this.user); // user情報は任意で更新
+          return Promise.resolve(accessToken)
+        })
+        .catch((error) => {
+          console.error('Failed to refresh access token:', error);
+          this.logout(); // リフレッシュ失敗時はログアウト
+          return Promise.reject(error);
+        })
+
     },
 
     // (オプション) トークンの有効性を確認するアクション

@@ -17,9 +17,17 @@ const routes: RouteRecordRaw[] = [
         name: 'image-bookmarks',
         component: () => import('pages/ImageBookmarks.vue'),
       },
-      { path: 'auther-home', // This will be accessible at yoursite.com/profile
-        name: 'auther-home', // A unique name for this route (recommended)
-        component: () => import('pages/AutherHome.vue'),
+      { path: 'novel-edit',
+        name: 'novel-edit',
+        component: () => import('pages/NovelEditBook.vue'),
+      },
+      { path: 'novel-edit/:bookId',
+        name: 'novel-edit-book',
+        component: () => import('pages/NovelEditBook.vue'),
+      },
+      { path: 'novel-auther-home', // This will be accessible at yoursite.com/profile
+        name: 'novel-auther-home', // A unique name for this route (recommended)
+        component: () => import('pages/NovelAutherHome.vue'),
       },
       { path: 'user-profile', // This will be accessible at yoursite.com/profile
         name: 'user-profile', // A unique name for this route (recommended)

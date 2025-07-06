@@ -137,16 +137,18 @@ export const useAuthStore = defineStore('authStore', {
      * このアクションは通常、Quasar のブートファイルから呼び出されます。
      */
     initializeAuthFromLocalStorage() {
-      const token = localStorage.getItem('accessToken');
-      const refreshTokenVal = localStorage.getItem('refreshToken');
+      const accessToken = localStorage.getItem('accessToken');
+      const refreshToken = localStorage.getItem('refreshToken');
       const userVal = localStorage.getItem('user');
 
-      if (token) {
+      if (accessToken) {
         const userData = userVal ? JSON.parse(userVal) : null;
-        this._setAuthData(token, refreshTokenVal, userData);
+        this._setAuthData(accessToken, refreshToken, userData);
         // (任意) トークンの有効性をここでバックエンドに確認することもできます
         // await this.verifyToken();
       } else {
+        console.debug('accessToken', accessToken)
+        console.debug('refreshToken', refreshToken)
         this._clearAuthData(); // 有効なトークンがなければクリア
       }
     },
@@ -165,10 +167,10 @@ export const useAuthStore = defineStore('authStore', {
         refresh: this.refreshToken,
       })
         .then((response) => {
-          const { accessToken, user } = response.data; // APIによっては新しいリフレッシュトークンも返る
-          // const newRefreshToken = response.data.newRefreshToken || this.refreshToken; // 新しいリフレッシュトークンがある場合
-          this._setAuthData(accessToken, this.refreshToken, user || this.user); // user情報は任意で更新
-          return Promise.resolve(accessToken)
+          const newRefreshToken = response.data.refresh; // 新しいリフレッシュトークンがある場合
+          const newAccessToken = response.data.access;
+          this._setAuthData(newAccessToken, newRefreshToken, this.user); // user情報は任意で更新
+          return Promise.resolve(newAccessToken)
         })
         .catch((error) => {
           console.error('Failed to refresh access token:', error);

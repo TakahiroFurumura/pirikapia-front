@@ -91,7 +91,7 @@ const linksList: EssentialLinkProps[] = [
     title: 'Create novels',
     caption: '',
     icon: 'edit',
-    link: {name: 'auther-home'}
+    link: {name: 'novel-auther-home'}
   },
   {
     title: 'Your profile',

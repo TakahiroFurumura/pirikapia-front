@@ -49,7 +49,7 @@
     </q-page-container>
     <q-footer class="q-pa-xs">
       <span>{{welcomeMessage}}</span>
-      <span class="q-pa-xs" v-if="debug">(debug mode)</span> </q-footer>
+      <span class="q-pa-xs" v-if="debug">(debug mode) {{apiBaseUrl}}</span> </q-footer>
   </q-layout>
 </template>
 
@@ -57,6 +57,7 @@
 import { ref, onMounted } from 'vue';
 import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink.vue';
 import { api } from 'boot/axios';
+import apiBaseUrl from 'boot/axios';
 import axios from 'axios';
 
 import { useAuthStore } from 'stores/auth'
@@ -79,7 +80,7 @@ const linksList: EssentialLinkProps[] = [
     title: 'Novels',
     caption: 'stories of beauties',
     icon: 'library_books',
-    link: ''
+    link: {name: 'novel-chapter'}
   },
   {
     title: 'Your bookmarks',

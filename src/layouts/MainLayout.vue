@@ -72,15 +72,15 @@ const debug = useDebugStore().isDebugMode
 const linksList: EssentialLinkProps[] = [
   {
     title: 'Images',
-    caption: 'browse beauties',
+    caption: 'images and movies',
     icon: 'collections',
     link: {name: 'home'}
   },
   {
     title: 'Novels',
-    caption: 'stories of beauties',
+    caption: 'novels and articles',
     icon: 'library_books',
-    link: {name: 'novel-chapter'}
+    link: {name: 'novel-home'}
   },
   {
     title: 'Your bookmarks',

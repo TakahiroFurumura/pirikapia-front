@@ -1,3 +1,5 @@
+import {NovelChapterProps} from "components/NovelChapter.vue";
+
 export interface APIResponseImage {
   filename: string;
   image_id: string;
@@ -33,5 +35,42 @@ export function apiResponseToThumbnailProps(rawData: APIResponseImage) {
     requires_login: rawData.requires_login,
     bookmark: rawData.bookmark,
     bookmark_count: rawData.bookmark_count,
+  }
+}
+
+
+export interface APIResponseNovelChapter {
+  chapter_title: string;
+  chapter_order: number;
+  chapter_str_id: string;
+  chapter_images: [];
+  chapter_description: string;
+}
+
+
+export function apiResponseToNovelChapterProps(rawData: APIResponseNovelChapter) {
+  return {
+    chapterTitle: rawData.chapter_title,
+  }
+}
+
+
+
+export interface APIResponseNovel {
+  novel_title: string;
+  cover_image: string;
+  novel_chapters: APIResponseNovelChapter[];
+  description: string;
+  novel_id: 6;
+}
+
+
+export function apiResponseToNovelThumbnailProps(rawData: APIResponseNovel) {
+  return {
+    novelTitle: rawData.novel_title,
+    coverImage: rawData.cover_image,
+    novelChapters: rawData.novel_chapters.map((rawItem: APIResponseNovelChapter): NovelChapterProps => { return apiResponseToNovelChapterProps(rawItem)}),
+    description: rawData.description,
+    novelId: rawData.novel_id,
   }
 }

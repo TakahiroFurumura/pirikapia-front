@@ -29,7 +29,15 @@ const routes: RouteRecordRaw[] = [
         name: 'novel-auther-home', // A unique name for this route (recommended)
         component: () => import('pages/NovelAutherHome.vue'),
       },
-      { path: 'novel-chapter', // This will be accessible at yoursite.com/profile
+      { path: 'novel-home', // This will be accessible at yoursite.com/profile
+        name: 'novel-home', // A unique name for this route (recommended)
+        component: () => import('pages/NovelHome.vue'),
+      },
+      { path: 'novel-title/:novelId', // This will be accessible at yoursite.com/profile
+        name: 'novel-title', // A unique name for this route (recommended)
+        component: () => import('pages/NovelTitle.vue'),
+      },
+      { path: 'novel-chapter/:novelId/:chapterId', // This will be accessible at yoursite.com/profile
         name: 'novel-chapter', // A unique name for this route (recommended)
         component: () => import('pages/NovelChapter.vue'),
       },

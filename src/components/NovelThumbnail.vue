@@ -7,14 +7,21 @@
         <ImageBox
           :imageId="props.coverImage"
           :showTags="false"
+          :crop-aspect-ratio="1.0"
         />
-      <div>{{props.novelTitle}}</div>
+      <div class="text-h5 q-my-sm">{{props.novelTitle}}</div>
       <div>{{props.description}}</div>
       <div
         v-for="chapter in props.novelChapters"
         :key="chapter.chapterTitle"
+        class="q-my-sm"
       >
-        <div>{{chapter.chapterTitle}}</div>
+        <q-separator class="q-my-md" />
+        <NovelThumbnailChapter
+          :coverImage="(chapter.coverImage !== undefined && chapter.coverImage.length > 0) ? chapter.coverImage : props.coverImage"
+          :description="chapter.description"
+          :chapterTitle="chapter.chapterTitle"
+        />
       </div>
     </div>
   </div>
@@ -27,14 +34,16 @@ const debug = uiConfigStore.isDebugMode
 if (debug) { console.debug('NovelThumbnail loaded') }
 
 import ImageBox from '../components/ImageBox.vue'
+import NovelThumbnailChapter from "components/NovelThumbnailChapter.vue";
+import type { NovelThumbnailChapterProps } from "components/NovelThumbnailChapter.vue";
 
 import { onMounted } from 'vue';
-import type { NovelChapterProps } from "components/NovelChapter.vue";
+
 
 export interface NovelThumbnailProps {
   novelTitle: string,
   coverImage: string,
-  novelChapters: NovelChapterProps[],
+  novelChapters: NovelThumbnailChapterProps[],
   description: string,
   novelId: number,
 }

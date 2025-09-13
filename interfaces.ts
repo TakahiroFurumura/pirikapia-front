@@ -1,4 +1,5 @@
 import {NovelChapterProps} from "components/NovelChapter.vue";
+import {NovelThumbnailChapterProps} from "components/NovelThumbnailChapter.vue";
 
 export interface APIResponseImage {
   filename: string;
@@ -38,7 +39,6 @@ export function apiResponseToThumbnailProps(rawData: APIResponseImage) {
   }
 }
 
-
 export interface APIResponseNovelChapter {
   chapter_title: string;
   chapter_order: number;
@@ -48,9 +48,11 @@ export interface APIResponseNovelChapter {
 }
 
 
-export function apiResponseToNovelChapterProps(rawData: APIResponseNovelChapter) {
+export function apiResponseToNovelThumbnailChapterProps(rawData: APIResponseNovelChapter) {
   return {
     chapterTitle: rawData.chapter_title,
+    coverImage: "",
+    description: rawData.chapter_description,
   }
 }
 
@@ -69,7 +71,7 @@ export function apiResponseToNovelThumbnailProps(rawData: APIResponseNovel) {
   return {
     novelTitle: rawData.novel_title,
     coverImage: rawData.cover_image,
-    novelChapters: rawData.novel_chapters.map((rawItem: APIResponseNovelChapter): NovelChapterProps => { return apiResponseToNovelChapterProps(rawItem)}),
+    novelChapters: rawData.novel_chapters.map((rawItem: APIResponseNovelChapter): NovelThumbnailChapterProps => { return apiResponseToNovelThumbnailChapterProps(rawItem)}),
     description: rawData.description,
     novelId: rawData.novel_id,
   }

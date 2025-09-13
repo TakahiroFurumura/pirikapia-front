@@ -24,12 +24,17 @@
           </div>
         </q-img>
       </router-link>
-
-      <q-card-actions align="left" class="q-mx-none q-pa-none q-my-none">
-        <q-btn flat round size="md" :color="favoriteColor" :icon="favoriteIcon" class="q-ml-none" @click="addToBookmark"> {{ bookmarkCount }}</q-btn>
-        <q-btn flat round size="md" color="primary" icon="comment" class="q-ml-sm"> {{ commentCount }}</q-btn>
-        <div class="text-caption q-ml-sm">by {{ owner_username }}</div>
-      </q-card-actions>
+      <div v-if="props.showButtons">
+      <div class="row">
+        <q-card-actions align="left" class="q-mx-none q-pa-none q-my-none">
+          <q-btn flat round size="md" :color="favoriteColor" :icon="favoriteIcon" class="q-ml-none" @click="addToBookmark"> {{ bookmarkCount }}</q-btn>
+          <q-btn flat round size="md" color="primary" icon="comment" class="q-ml-sm"> {{ commentCount }}</q-btn>
+          <div class="text-caption q-ml-sm">by {{ owner_username }}</div>
+        </q-card-actions>
+        <q-card-section class="text-caption" v-if="props.showPublishedDate">
+           {{ createdOnDate }}
+        </q-card-section>
+      </div>
       <!-- tags -->
       <q-card-section v-if="tags.length>0 && props.showTags">
           <q-chip color="primary" text-color="white" v-for="tag in tags" :key="tag"  class="q-mx-xs q-px-sm">
@@ -38,9 +43,7 @@
             </router-link>
           </q-chip>
       </q-card-section>
-      <q-card-section class="text-caption">
-         {{ createdOnDate }}
-      </q-card-section>
+      </div>
 
     </q-card>
 </template>
@@ -67,12 +70,18 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {year: "numeric", month: 
 // ルートパラメータ名 (imageId) と同じ名前でpropsを定義します。
 interface Props {
   imageId: string;
+  linkTo?: string;
   showTags: boolean;
+  showPublishedDate?: boolean;
+  showButtons?: boolean;
   cropAspectRatio?: number | undefined | null;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   showTags: true,
+  linkTo: "",
+  showPublishedDate: true,
+  showButtons: true,
   cropAspectRatio: null,
 });
 
@@ -200,7 +209,11 @@ watch(
 );
 
 function linkToDetail() {
-  return `/image-detail-view/${props.imageId}`;
+  if (props.linkTo == "") {
+    return `/image-detail-view/${props.imageId}`;
+  } else {
+    return props.linkTo;
+  }
 }
 
 </script>

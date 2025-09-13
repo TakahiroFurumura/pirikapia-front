@@ -71,14 +71,14 @@ const debug = useDebugStore().isDebugMode
 
 const linksList: EssentialLinkProps[] = [
   {
-    title: 'Images',
-    caption: 'images and movies',
+    title: 'Images & Movies',
+    caption: '',
     icon: 'collections',
     link: {name: 'home'}
   },
   {
-    title: 'Novels',
-    caption: 'novels and articles',
+    title: 'Novels & Articles',
+    caption: '',
     icon: 'library_books',
     link: {name: 'novel-home'}
   },
@@ -89,10 +89,22 @@ const linksList: EssentialLinkProps[] = [
     link: {name: 'image-bookmarks'}
   },
   {
-    title: 'Create novels',
-    caption: '',
+    title: 'Upload and manage',
+    caption: 'upload or manage your images, videos and texts',
+    icon: 'upload',
+    link: {name: 'home'}
+  },
+  {
+    title: 'Generate images',
+    caption: '(to be developed) create novels and articles',
     icon: 'edit',
-    link: {name: 'novel-auther-home'}
+    link: {name: 'home'}
+  },
+  {
+    title: 'Generate texts',
+    caption: '(to be developed) create images',
+    icon: 'edit',
+    link: {name: 'home'}
   },
   {
     title: 'Your profile',

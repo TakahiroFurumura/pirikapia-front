@@ -8,6 +8,9 @@ const routes: RouteRecordRaw[] = [
       { path: '/',
         name: 'home',
         component: () => import('pages/IndexPage.vue') },
+      { path: 'style-test',
+        name: 'style-test',
+        component: () => import('pages/StyleTest.vue') },
       { path: 'image-detail-view/:imageId',
         name: 'image-detail-view', // A unique name for this route (recommended)
         component: () => import('pages/ImageDetailView.vue'),

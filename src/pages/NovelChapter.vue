@@ -65,6 +65,7 @@ const novel = ref<NovelThumbnailProps>(
       novelChapters: [],
       description: "",
       novelId: 0,
+      ownerId: 0,
   }
 );
 

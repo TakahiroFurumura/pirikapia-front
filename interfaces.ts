@@ -67,7 +67,8 @@ export interface APIResponseNovel {
   cover_image: string;
   novel_chapters: APIResponseNovelChapter[];
   description: string;
-  novel_id: 6;
+  novel_id: number;
+  owner_id: number;
 }
 
 
@@ -78,5 +79,6 @@ export function apiResponseToNovelThumbnailProps(rawData: APIResponseNovel) {
     novelChapters: rawData.novel_chapters.map((rawItem: APIResponseNovelChapter): NovelThumbnailChapterProps => { return apiResponseToNovelThumbnailChapterProps(rawItem)}),
     description: rawData.description,
     novelId: rawData.novel_id,
+    ownerId: rawData.owner_id,
   }
 }

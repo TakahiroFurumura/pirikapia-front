@@ -5,7 +5,7 @@
     <div class="text-h5 q-my-sm">{{props.chapterTitle}}</div>
   </router-link>
   <div class="row">
-      <div class="col-lg-2 col-md-3 col-sm-6">
+      <div class="col-12 col-md-6 col-lg-6 col-xl-6">
         <ImageBox
           :imageId="props.coverImage"
           :enableLinkToImageDetailView="false"
@@ -16,7 +16,7 @@
           :link-to="linkToChapter"
         />
       </div>
-      <div class="col-lg-10 col-md-9 col-sm-6">
+      <div class="col-12 col-md-6 col-lg-6 col-xl-6">
         <router-link :to="linkToChapter" style="text-decoration: none">
           <div class=" q-mx-md">
             {{descriptionLenghtAdjusted}}...

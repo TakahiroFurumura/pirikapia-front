@@ -7,6 +7,7 @@
         :novelChapters="novel.novelChapters"
         :description="novel.description"
         :novelId="novel.novelId"
+        :owner-id="novel.ownerId"
         :imageLinksToImageDetail="true"
       ></NovelThumbnail>
     </div>
@@ -46,6 +47,7 @@ const novel = ref<NovelThumbnailProps>(
       novelChapters: [],
       description: "",
       novelId: 0,
+    ownerId: 0
   }
 );
 

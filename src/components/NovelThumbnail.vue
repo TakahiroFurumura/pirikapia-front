@@ -58,6 +58,7 @@ export interface NovelThumbnailProps {
   description: string,
   novelId: number,
   imageLinksToImageDetail?: boolean,
+  ownerId: number,
 }
 
 const props = withDefaults(defineProps<NovelThumbnailProps>(), {

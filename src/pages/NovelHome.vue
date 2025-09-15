@@ -4,7 +4,7 @@
       <div
           v-for="(novel,) in novels"
           :key="novel.novelId"
-          class="col-12 col-xl-6 q-px-md q-py-sm"
+          class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 q-px-md q-py-sm"
         >
           <NovelThumbnail
             :novelTitle="novel.novelTitle"
@@ -12,6 +12,7 @@
             :novelChapters="novel.novelChapters"
             :description="novel.description"
             :novelId="novel.novelId"
+            :owner-id="novel.ownerId"
           >
           </NovelThumbnail>
         </div>

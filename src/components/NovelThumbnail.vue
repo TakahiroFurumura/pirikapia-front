@@ -20,7 +20,7 @@
         <q-separator class="q-my-md" />
         <NovelThumbnailChapter
           :novel-id="novelId"
-          :coverImage="(chapter.coverImage !== undefined && chapter.coverImage.length > 0) ? chapter.coverImage : props.coverImage"
+          :coverImage="(chapter.coverImage !== undefined && chapter.coverImage !== null && chapter.coverImage.length > 0) ? chapter.coverImage : props.coverImage"
           :description="chapter.description"
           :chapterTitle="chapter.chapterTitle"
           :chapter-str-id="chapter.chapterStrId"

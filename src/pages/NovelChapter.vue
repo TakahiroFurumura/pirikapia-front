@@ -1,8 +1,8 @@
 <template>
   <q-page>
     <div class="q-ma-md q-pa-md">
-      back to index
-      <div class="text-body2">{{title}}</div>
+      <router-link :to="`/novel-title/${novelId}`">{{novel.novelTitle}}</router-link> >
+      <span class="text-body2">{{title}}</span>
     </div>
 
     <div class="col-12 col-xl-8 q-ma-md q-pa-md bg-grey-2">

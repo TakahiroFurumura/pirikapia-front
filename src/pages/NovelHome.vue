@@ -1,9 +1,5 @@
 <template>
   <q-page>
-    <div v-if="loading" class="text-center">
-      <q-spinner-gears size="50px" color="primary" />
-      <p>Loading...</p>
-    </div>
     <div class="row">
       <div
           v-for="(novel,) in novels"

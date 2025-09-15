@@ -46,6 +46,7 @@ export interface APIResponseNovelChapter {
   chapter_str_id: string;
   chapter_images: [];
   chapter_description: string;
+  cover_image: string;
 }
 
 
@@ -54,7 +55,7 @@ export function apiResponseToNovelThumbnailChapterProps(rawData: APIResponseNove
     novelId: rawData.novel_title_id,
     chapterStrId: rawData.chapter_str_id,
     chapterTitle: rawData.chapter_title,
-    coverImage: "",
+    coverImage: rawData.cover_image,
     description: rawData.chapter_description,
   }
 }

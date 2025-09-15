@@ -1,24 +1,24 @@
 <template>
   <q-page>
-    <p>Novels</p>
     <div v-if="loading" class="text-center">
       <q-spinner-gears size="50px" color="primary" />
       <p>Loading...</p>
     </div>
-    <div class="col-12 q-px-md q-py-md text-h5">{{title}}</div>
-    <div
-        v-for="(novel,) in novels"
-        :key="novel.novelId"
-        class="col-12 q-px-md q-py-sm"
-      >
-      <NovelThumbnail
-        :novelTitle="novel.novelTitle"
-        :coverImage="novel.coverImage"
-        :novelChapters="novel.novelChapters"
-        :description="novel.description"
-        :novelId="novel.novelId"
-      >
-      </NovelThumbnail>
+    <div class="row">
+      <div
+          v-for="(novel,) in novels"
+          :key="novel.novelId"
+          class="col-12 col-xl-6 q-px-md q-py-sm"
+        >
+          <NovelThumbnail
+            :novelTitle="novel.novelTitle"
+            :coverImage="novel.coverImage"
+            :novelChapters="novel.novelChapters"
+            :description="novel.description"
+            :novelId="novel.novelId"
+          >
+          </NovelThumbnail>
+        </div>
       </div>
   </q-page>
 </template>
@@ -46,7 +46,6 @@ import type { NovelThumbnailProps } from "components/NovelThumbnail.vue";
 import type { APIResponseNovel } from "app/interfaces";
 import { apiResponseToNovelThumbnailProps } from "app/interfaces";
 
-const title = ref("")
 const novels = ref<NovelThumbnailProps[]>([]);
 
 function loadNovels() {

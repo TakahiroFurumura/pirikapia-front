@@ -1,52 +1,83 @@
 <template>
-  <q-page>
-    <div class="col-12 q-px-md q-py-md text-h5">{{title}}</div>
-    <div
-        v-for="(scene,) in scenes"
-        :key="scene"
-        class="col-12 q-px-md q-py-sm novel-scene"
-      >
-      {{scene}}
-      </div>
+  <q-page class="">
+    <div class="col-12 q-ma-md bg-grey-2">
+      <NovelThumbnail
+        :novelTitle="novel.novelTitle"
+        :coverImage="novel.coverImage"
+        :novelChapters="novel.novelChapters"
+        :description="novel.description"
+        :novelId="novel.novelId"
+        :imageLinksToImageDetail="true"
+      ></NovelThumbnail>
+    </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-
+// config
+import { useUiConfigStore } from "stores/uiconfig";
+const uiConfigStore = useUiConfigStore()
+const debug = uiConfigStore.isDebugMode
+// vue
 import { ref, onMounted } from 'vue';
+import { useRoute } from "vue-router";
+const route = useRoute();
 // import type { APIResponseImage } from "app/interfaces";
 // import {apiResponseToThumbnailProps} from "app/interfaces";
 // import { useAuthStore } from 'stores/auth'
 // const authStore = useAuthStore()
 import { api } from 'boot/axios.js'
+// import NovelThumbnailChapter from "components/NovelThumbnailChapter.vue";
+// import ImageBox from "components/ImageBox.vue";
 // import ImageThumbnail from "components/ImageThumbnail.vue";
 // import { useRouter } from 'vue-router'
 // import ImageThumbnail from "components/ImageThumbnail.vue";
 // import type { ThumbnailProps } from 'components/ImageThumbnail.vue';
 // const router = useRouter();
+import NovelThumbnail from "components/NovelThumbnail.vue";
+import type { NovelThumbnailProps } from "components/NovelThumbnail.vue";
+import type { APIResponseNovel } from "app/interfaces";
+import { apiResponseToNovelThumbnailProps } from "app/interfaces";
 
-const title = ref("")
-const scenes = ref<string[]>([]);
+const novel = ref<NovelThumbnailProps>(
+  {
+      novelTitle: "",
+      coverImage: "",
+      novelChapters: [],
+      description: "",
+      novelId: 0,
+  }
+);
 
-function loadNovelChapter() {
-  api.get('/novels/eve/jp/')
-    .then((response) => {
-      console.log(response.data)
-      response.data.text.forEach((text: string) => {
-        console.log(text)
-        title.value = response.data.title
-        scenes.value.push(text)
+const loading = ref<boolean>(true);
+
+function loadNovels() {
+
+  if (typeof route.params.novelId == "string") {
+    const url = `/novels/${route.params.novelId}/${uiConfigStore.language}/`
+    loading.value = true
+    api.get(url)
+      .then((response) => {
+        const rawItem = response.data as APIResponseNovel;
+          console.debug(rawItem)
+          novel.value = apiResponseToNovelThumbnailProps(rawItem)
+        })
+      .catch((error) => {
+        console.log(error)
       })
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+      .finally(() => {
+        loading.value = false
+      })
+  } else {
+    return
+  }
 }
-
 
 // --- ライフサイクルフック ---
 onMounted(() => {
-  loadNovelChapter()
+  if (debug) console.debug(route.params.novelId)
+  loadNovels()
+
 });
 </script>
 

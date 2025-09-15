@@ -40,6 +40,7 @@ export function apiResponseToThumbnailProps(rawData: APIResponseImage) {
 }
 
 export interface APIResponseNovelChapter {
+  novel_title_id: number;
   chapter_title: string;
   chapter_order: number;
   chapter_str_id: string;
@@ -50,6 +51,8 @@ export interface APIResponseNovelChapter {
 
 export function apiResponseToNovelThumbnailChapterProps(rawData: APIResponseNovelChapter) {
   return {
+    novelId: rawData.novel_title_id,
+    chapterStrId: rawData.chapter_str_id,
     chapterTitle: rawData.chapter_title,
     coverImage: "",
     description: rawData.chapter_description,

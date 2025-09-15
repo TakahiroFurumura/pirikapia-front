@@ -20,6 +20,7 @@ const routes: RouteRecordRaw[] = [
         name: 'image-bookmarks',
         component: () => import('pages/ImageBookmarks.vue'),
       },
+      // novels
       { path: 'novel-edit',
         name: 'novel-edit',
         component: () => import('pages/NovelEditBook.vue'),
@@ -40,7 +41,7 @@ const routes: RouteRecordRaw[] = [
         name: 'novel-title', // A unique name for this route (recommended)
         component: () => import('pages/NovelTitle.vue'),
       },
-      { path: 'novel-chapter/:novelId/:chapterId', // This will be accessible at yoursite.com/profile
+      { path: 'novel-chapter/:novelId/:chapterStrId', // This will be accessible at yoursite.com/profile
         name: 'novel-chapter', // A unique name for this route (recommended)
         component: () => import('pages/NovelChapter.vue'),
       },

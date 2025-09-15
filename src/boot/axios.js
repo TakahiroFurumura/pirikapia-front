@@ -7,8 +7,10 @@ const authStore = useAuthStore();
 import { useRouter } from 'vue-router'
 const router = useRouter();
 
+
 console.info(window.location.hostname)
 const apiBaseUrl = window.location.hostname == "localhost" ? "http://127.0.0.1:8000" : "https://api.pirikapia.com"
+const debug = window.location.hostname === "localhost"
 // const apiBaseUrl = "https://api.pirikapia.com"
 
 console.info(`Running on ${window.location.hostname}, using api base url ${apiBaseUrl}`);
@@ -23,7 +25,7 @@ authStore.initializeAuthFromLocalStorage()
 
 // request interceptor
 api.interceptors.request.use(req  => {
-  console.debug(req.url, req.method, "request", req)
+  if (debug) console.debug('request', req.url, req.method, req)
   return req;
 }, err => {
   return Promise.reject(err);
@@ -32,7 +34,7 @@ api.interceptors.request.use(req  => {
 // response interceptor
 api.interceptors.response.use(
   res => {
-    console.debug(res.url, "response", res)
+    if (debug) console.debug('response', res.request.responseURL, res.status, res)
     return res;
   }, async error => {
       const originalRequest = error.config

@@ -1,5 +1,5 @@
 import {NovelChapterProps} from "components/NovelChapter.vue";
-import {NovelThumbnailChapterProps} from "components/NovelThumbnailChapter.vue";
+import {NovelCoverChapterProps} from "components/NovelCoverChapter.vue";
 
 export interface APIResponseImage {
   filename: string;
@@ -50,7 +50,7 @@ export interface APIResponseNovelChapter {
 }
 
 
-export function apiResponseToNovelThumbnailChapterProps(rawData: APIResponseNovelChapter) {
+export function apiResponseToNovelCoverChapterProps(rawData: APIResponseNovelChapter) {
   return {
     novelId: rawData.novel_title_id,
     chapterStrId: rawData.chapter_str_id,
@@ -69,16 +69,18 @@ export interface APIResponseNovel {
   description: string;
   novel_id: number;
   owner_id: number;
+  owner_username: string;
 }
 
 
-export function apiResponseToNovelThumbnailProps(rawData: APIResponseNovel) {
+export function apiResponseToNovelCoverProps(rawData: APIResponseNovel) {
   return {
     novelTitle: rawData.novel_title,
     coverImage: rawData.cover_image,
-    novelChapters: rawData.novel_chapters.map((rawItem: APIResponseNovelChapter): NovelThumbnailChapterProps => { return apiResponseToNovelThumbnailChapterProps(rawItem)}),
+    novelChapters: rawData.novel_chapters.map((rawItem: APIResponseNovelChapter): NovelCoverChapterProps => { return apiResponseToNovelCoverChapterProps(rawItem)}),
     description: rawData.description,
     novelId: rawData.novel_id,
     ownerId: rawData.owner_id,
+    ownerUsername: rawData.owner_username,
   }
 }

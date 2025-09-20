@@ -6,15 +6,17 @@
           :key="novel.novelId"
           class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 q-px-md q-py-sm"
         >
-          <NovelThumbnail
+          <NovelCover
             :novelTitle="novel.novelTitle"
             :coverImage="novel.coverImage"
             :novelChapters="novel.novelChapters"
             :description="novel.description"
             :novelId="novel.novelId"
             :owner-id="novel.ownerId"
+            :owner-username="novel.ownerUsername"
+            :thumbnail="true"
           >
-          </NovelThumbnail>
+          </NovelCover>
         </div>
       </div>
   </q-page>
@@ -38,12 +40,12 @@ const loading = ref<boolean>(true);
 // import ImageThumbnail from "components/ImageThumbnail.vue";
 // import type { ThumbnailProps } from 'components/ImageThumbnail.vue';
 // const router = useRouter();
-import NovelThumbnail from "components/NovelThumbnail.vue";
-import type { NovelThumbnailProps } from "components/NovelThumbnail.vue";
+import NovelCover from "components/NovelCover.vue";
+import type { NovelCoverProps } from "components/NovelCover.vue";
 import type { APIResponseNovel } from "app/interfaces";
-import { apiResponseToNovelThumbnailProps } from "app/interfaces";
+import { apiResponseToNovelCoverProps } from "app/interfaces";
 
-const novels = ref<NovelThumbnailProps[]>([]);
+const novels = ref<NovelCoverProps[]>([]);
 
 function loadNovels() {
 
@@ -52,8 +54,8 @@ function loadNovels() {
     .then((response) => {
       const rawItems = response.data as APIResponseNovel[];
       console.debug(rawItems)
-      novels.value = rawItems.map((rawItem: APIResponseNovel): NovelThumbnailProps => {
-        return apiResponseToNovelThumbnailProps(rawItem)
+      novels.value = rawItems.map((rawItem: APIResponseNovel): NovelCoverProps => {
+        return apiResponseToNovelCoverProps(rawItem)
       })
       loading.value = false
     })

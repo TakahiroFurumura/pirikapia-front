@@ -1,51 +1,50 @@
 <template>
-    <q-card flat>
-      <router-link :to=linkToDetail()>
-        <q-img
-          :src="imageData?.signed_url"
-          spinner-color="grey"
-          :ratio="aspectRatio"
-          spinner-size="82px"
-          style="position: relative;"
-        >
-          <template v-slot:error>
-            <div class="absolute-full flex flex-center bg-grey text-white">
-              Failed to load...
-            </div>
-          </template>
+  <router-link :to=linkToDetail()>
+    <q-img
+      :src="imageData?.signed_url"
+      spinner-color="grey"
+      :ratio="aspectRatio"
+      spinner-size="82px"
+      style="position: relative;"
+      :fit="fit"
+      :height="height"
+    >
+      <template v-slot:error>
+        <div class="absolute-full flex flex-center bg-grey text-white">
+          Failed to load...
+        </div>
+      </template>
 
-          <div
-            v-if="imageData?.requires_login"
-            class="absolute-full text-subtitle1  flex flex-center"
-            style="cursor: pointer; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
-            @click="router.push('/user-login')"
-          >
-            <span class="">Login to unlock</span>
-          </div>
-        </q-img>
-      </router-link>
-      <div v-if="props.showButtons">
-      <div class="row">
-        <q-card-actions align="left" class="q-mx-none q-pa-none q-my-none">
-          <q-btn flat round size="md" :color="favoriteColor" :icon="favoriteIcon" class="q-ml-none" @click="addToBookmark"> {{ bookmarkCount }}</q-btn>
-          <q-btn flat round size="md" color="primary" icon="comment" class="q-ml-sm"> {{ commentCount }}</q-btn>
-          <div class="text-caption q-ml-sm">by {{ owner_username }}</div>
-        </q-card-actions>
-        <q-card-section class="text-caption" v-if="props.showPublishedDate">
-           {{ createdOnDate }}
-        </q-card-section>
+      <div
+        v-if="imageData?.requires_login"
+        class="absolute-full text-subtitle1  flex flex-center"
+        style="cursor: pointer; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
+        @click="router.push('/user-login')"
+      >
+        <span class="">Login to unlock</span>
       </div>
-      <!-- tags -->
-      <q-card-section v-if="tags.length>0 && props.showTags">
-          <q-chip color="primary" text-color="white" v-for="tag in tags" :key="tag"  class="q-mx-xs q-px-sm">
-            <router-link :to=tagSearchLink(tag) style="text-decoration: none; color: white" >
-              {{tag.replace(/_/g, ' ')}}
-            </router-link>
-          </q-chip>
-      </q-card-section>
-      </div>
-
-    </q-card>
+    </q-img>
+  </router-link>
+  <div v-if="props.showButtons">
+  <div class="row">
+    <q-card-actions align="left" class="q-mx-none q-pa-none q-my-none">
+      <q-btn flat round size="md" :color="favoriteColor" :icon="favoriteIcon" class="q-ml-none" @click="addToBookmark"> {{ bookmarkCount }}</q-btn>
+      <q-btn flat round size="md" color="primary" icon="comment" class="q-ml-sm"> {{ commentCount }}</q-btn>
+      <div class="text-caption q-ml-sm">by {{ owner_username }}</div>
+    </q-card-actions>
+    <q-card-section class="text-caption" v-if="props.showPublishedDate">
+       {{ createdOnDate }}
+    </q-card-section>
+  </div>
+  <!-- tags -->
+  <q-card-section v-if="tags.length>0 && props.showTags">
+      <q-chip color="primary" text-color="white" v-for="tag in tags" :key="tag"  class="q-mx-xs q-px-sm">
+        <router-link :to=tagSearchLink(tag) style="text-decoration: none; color: white" >
+          {{tag.replace(/_/g, ' ')}}
+        </router-link>
+      </q-chip>
+  </q-card-section>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -75,6 +74,8 @@ interface Props {
   showPublishedDate?: boolean;
   showButtons?: boolean;
   cropAspectRatio?: number | undefined | null;
+  heightPercent?: number | undefined | null;
+  fit?: "contain" | "cover" | "fill" | "none" | "scale-down" | undefined;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -85,6 +86,14 @@ const props = withDefaults(defineProps<Props>(), {
   cropAspectRatio: null,
 });
 
+const fit = props.fit ? props.fit : "cover";
+const height = computed(()=> {
+  if (props.heightPercent !== null && props.heightPercent !== undefined) {
+    return `${props.heightPercent}%`
+  } else {
+    return "none"
+  }
+})
 
 // reactives
 const imageData = ref<APIResponseImage | null>(null); // APIから取得する画像データの型に合わせてください

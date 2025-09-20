@@ -43,7 +43,7 @@ import { api } from 'boot/axios.js'
 // import ImageThumbnail from "components/ImageThumbnail.vue";
 // import { useRouter } from 'vue-router'
 import { useRoute } from 'vue-router'
-import { apiResponseToNovelThumbnailProps } from "app/interfaces";
+import { apiResponseToNovelCoverProps } from "app/interfaces";
 import type { APIResponseNovel } from "app/interfaces";
 const route = useRoute()
 // import ImageThumbnail from "components/ImageThumbnail.vue";
@@ -56,9 +56,9 @@ const title = ref("")
 const coverImage = ref("")
 const scenes = ref<string[]>([]);
 
-import type { NovelThumbnailProps } from "components/NovelThumbnail.vue";
+import type { NovelCoverProps } from "components/NovelCover.vue";
 import ImageBox from "components/ImageBox.vue";
-const novel = ref<NovelThumbnailProps>(
+const novel = ref<NovelCoverProps>(
   {
       novelTitle: "",
       coverImage: "",
@@ -66,6 +66,7 @@ const novel = ref<NovelThumbnailProps>(
       description: "",
       novelId: 0,
       ownerId: 0,
+    ownerUsername: ""
   }
 );
 
@@ -96,7 +97,7 @@ function loadNovel() {
       .then((response) => {
         const rawItem = response.data as APIResponseNovel;
           console.debug(rawItem)
-          novel.value = apiResponseToNovelThumbnailProps(rawItem)
+          novel.value = apiResponseToNovelCoverProps(rawItem)
         })
       .catch((error) => {
         console.log(error)

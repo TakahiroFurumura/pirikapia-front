@@ -102,7 +102,7 @@ const linksList: EssentialLinkProps[] = [
     title: 'Novels & Articles',
     caption: '',
     icon: 'library_books',
-    link: {path: `novel-home/${uiConfigStore.language}`}
+    link: {path: `/novel-home/${uiConfigStore.language}`}
   },
   {
     title: 'Your bookmarks',

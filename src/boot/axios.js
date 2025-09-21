@@ -1,7 +1,6 @@
 import { boot } from 'quasar/wrappers';
 import axios from 'axios';
 import { useAuthStore } from 'src/stores/auth' // Piniaストアのパス
-const authStore = useAuthStore();
 
 
 import { useRouter } from 'vue-router'
@@ -21,7 +20,6 @@ const api = axios.create({
   // headers: { 'X-Custom-Header': 'foobar' }
 });
 
-authStore.initializeAuthFromLocalStorage()
 
 // request interceptor
 api.interceptors.request.use(req  => {
@@ -37,6 +35,9 @@ api.interceptors.response.use(
     if (debug) console.debug('response', res.request.responseURL, res.status, res)
     return res;
   }, async error => {
+
+      const authStore = useAuthStore();
+      authStore.initializeAuthFromLocalStorage()
       const originalRequest = error.config
       // 401エラーで、かつ、まだリトライしていない場合
       if (error.response && error.response.status === 401 && !originalRequest._retry) {

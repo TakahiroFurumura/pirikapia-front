@@ -9,7 +9,11 @@ export const useUiConfigStore = defineStore('uiConfigStore', {
     getLanguage: (state) => state.language,
     isDebugMode: (state) => state.debugMode
   },
-  actions: {}
+  actions: {
+    setLanguage(language: string) {
+      this.language = language;
+    },
+  }
 });
 
 if (import.meta.hot) {

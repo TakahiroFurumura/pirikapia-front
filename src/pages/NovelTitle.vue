@@ -30,7 +30,7 @@ const uiConfigStore = useUiConfigStore()
 const debug = uiConfigStore.isDebugMode
 import { useMeta } from 'quasar';
 // vue
-import { ref, onMounted, computed } from 'vue';
+import {ref, onMounted, computed, watch} from 'vue';
 import { useRoute } from "vue-router";
 const route = useRoute();
 // import type { APIResponseImage } from "app/interfaces";
@@ -41,7 +41,8 @@ import { api } from 'boot/axios.js'
 // import NovelCoverChapter from "components/NovelCoverChapter.vue";
 // import ImageBox from "components/ImageBox.vue";
 // import ImageThumbnail from "components/ImageThumbnail.vue";
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 // import ImageThumbnail from "components/ImageThumbnail.vue";
 // import type { ThumbnailProps } from 'components/ImageThumbnail.vue';
 // const router = useRouter();
@@ -71,6 +72,16 @@ const isOwner = computed(() => {
   } else {
     return false
   }
+})
+watch(() => uiConfigStore.language, (newLanguage) => {
+  if (debug) console.debug(`language was changed to ${newLanguage}`)
+  router.push({ path: `/novel-title/${uiConfigStore.language}` })
+    .then(() => {
+      loadNovels()
+    })
+    .catch((error) => {
+      console.error(error)
+    })
 })
 
 const showOwnerMenu = ref<boolean>(false)

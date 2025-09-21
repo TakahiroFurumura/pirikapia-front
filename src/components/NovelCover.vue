@@ -1,7 +1,7 @@
 <template>
   <div class="row bg-grey-2 q-pa-md" >
     <div class="col-12 mx-auto">
-      <router-link :to="`/novel-title/${props.novelId}`" style="text-decoration: none;">
+      <router-link :to="`/novel-title/${props.novelId}/${uiConfigStore.language}`" style="text-decoration: none;">
         <ImageBox
             :imageId="props.coverImage"
             :showTags="false"
@@ -65,7 +65,7 @@ const imageLinkTo = computed(() => {
   if (props.imageLinksToImageDetail) {
     return ""
   } else {
-    return `/novel-title/${props.novelId}`
+    return `/novel-title/${props.novelId}/${uiConfigStore.language}`
   }
 });
 
@@ -91,7 +91,7 @@ const props = withDefaults(defineProps<NovelCoverProps>(), {
 });
 
 function linkToChapter(chapterStrId: string) {
-  return `/novel-chapter/${props.novelId}/${chapterStrId}`;
+  return `/novel-chapter/${props.novelId}/${chapterStrId}/${uiConfigStore.language}`;
 }
 
 onMounted(() => {

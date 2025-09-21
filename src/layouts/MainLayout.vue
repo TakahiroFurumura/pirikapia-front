@@ -18,6 +18,15 @@
             <span class="q-ml-sm">{{authStore.user.username}}</span>
           </q-btn>
         </q-item>
+
+        <!-- -->
+          <q-select dark borderless v-model="language" :options="languageOptions">
+            <template v-slot:prepend>
+              <q-icon color="white" name="language"></q-icon>
+              <q-tooltip>Language</q-tooltip>
+            </template>
+          </q-select>
+
         <q-item v-if="!authStore.isAuthenticated" clickable @click="router.push('/user-login')">
           <q-btn flat round dense icon="login"><span class="q-ml-sm">Login</span></q-btn>
         </q-item>
@@ -54,20 +63,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+// config
+import { useAuthStore } from "stores/auth";
+const authStore = useAuthStore();
+import { useUiConfigStore } from "stores/uiconfig";
+const uiConfigStore = useUiConfigStore()
+const debug = uiConfigStore.isDebugMode
+
+import { ref, watch, onMounted } from 'vue';
 import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink.vue';
 import { api } from 'boot/axios';
 import apiBaseUrl from 'boot/axios';
 import axios from 'axios';
 
-import { useAuthStore } from 'stores/auth'
-const authStore = useAuthStore()
-
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
-import { useDebugStore } from "stores/debug";
-const debug = useDebugStore().isDebugMode
+const language = ref(uiConfigStore.language)
+const languageOptions = [
+  'en', 'ja'
+]
+watch(language, (newLanguage) => {
+  uiConfigStore.setLanguage(newLanguage)
+})
+
+watch(() => uiConfigStore.language, (newLanguage) => {
+  language.value = newLanguage
+})
 
 const linksList: EssentialLinkProps[] = [
   {
@@ -80,7 +102,7 @@ const linksList: EssentialLinkProps[] = [
     title: 'Novels & Articles',
     caption: '',
     icon: 'library_books',
-    link: {name: 'novel-home'}
+    link: {path: `novel-home/${uiConfigStore.language}`}
   },
   {
     title: 'Your bookmarks',
@@ -92,7 +114,7 @@ const linksList: EssentialLinkProps[] = [
     title: 'Upload and manage',
     caption: 'upload or manage your images, videos and texts',
     icon: 'upload',
-    link: {name: 'home'}
+    link: {name: 'manage-creatives'}
   },
   {
     title: 'Generate images',
@@ -188,6 +210,8 @@ onMounted(() => {
     .then()
     .catch(error => {console.log(error)})
     .finally(() => {});
+  uiConfigStore.language = navigator.language ? navigator.language : 'ja';
+  if (debug) console.debug('language set to', uiConfigStore.language)
 });
 
 </script>

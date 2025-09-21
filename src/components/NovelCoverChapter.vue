@@ -65,7 +65,7 @@ const props = withDefaults(defineProps<NovelCoverChapterProps>(), {
 });
 
 const linkToChapter = computed(() => {
-  return `/novel-chapter/${props.novelId}/${props.chapterStrId}`;
+  return `/novel-chapter/${props.novelId}/${props.chapterStrId}/${uiConfigStore.language}`;
 })
 
 onMounted(() => {

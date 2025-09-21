@@ -11,6 +11,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'style-test',
         name: 'style-test',
         component: () => import('pages/StyleTest.vue') },
+      // images
       { path: 'image-detail-view/:imageId',
         name: 'image-detail-view', // A unique name for this route (recommended)
         component: () => import('pages/ImageDetailView.vue'),
@@ -33,18 +34,25 @@ const routes: RouteRecordRaw[] = [
         name: 'novel-auther-home', // A unique name for this route (recommended)
         component: () => import('pages/NovelAutherHome.vue'),
       },
-      { path: 'novel-home', // This will be accessible at yoursite.com/profile
+      { path: 'novel-home/:language?', // This will be accessible at yoursite.com/profile
         name: 'novel-home', // A unique name for this route (recommended)
         component: () => import('pages/NovelHome.vue'),
       },
-      { path: 'novel-title/:novelId', // This will be accessible at yoursite.com/profile
+      { path: 'novel-title/:novelId/:language?', // This will be accessible at yoursite.com/profile
         name: 'novel-title', // A unique name for this route (recommended)
         component: () => import('pages/NovelTitle.vue'),
       },
-      { path: 'novel-chapter/:novelId/:chapterStrId', // This will be accessible at yoursite.com/profile
+      { path: 'novel-chapter/:novelId/:chapterStrId/:language?', // This will be accessible at yoursite.com/profile
         name: 'novel-chapter', // A unique name for this route (recommended)
         component: () => import('pages/NovelChapter.vue'),
       },
+      //
+      { path: 'manage-creatives', // This will be accessible at yoursite.com/profile
+        name: 'manage-creatives', // A unique name for this route (recommended)
+        component: () => import('pages/ManageCreatives.vue'),
+      },
+
+      // user account
       { path: 'user-profile', // This will be accessible at yoursite.com/profile
         name: 'user-profile', // A unique name for this route (recommended)
         component: () => import('pages/UserProfile.vue'),

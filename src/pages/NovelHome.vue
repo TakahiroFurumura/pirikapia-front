@@ -19,6 +19,11 @@
           </NovelCover>
         </div>
       </div>
+    <div class="q-ma-md">
+      <div v-if="uiConfigStore.language=='ja'"><router-link to="/novel-home/en/">EN</router-link></div>
+      <div v-if="uiConfigStore.language=='en'"><router-link to="/novel-home/ja/">日本語</router-link></div>
+    </div>
+
   </q-page>
 </template>
 
@@ -28,7 +33,7 @@ const uiConfigStore = useUiConfigStore()
 const debug = uiConfigStore.isDebugMode
 if (debug) console.debug("uiConfigStore", `debug mode: ${uiConfigStore.isDebugMode}, `, `language: ${uiConfigStore.language}`)
 
-import { ref, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 // import type { APIResponseImage } from "app/interfaces";
 // import {apiResponseToThumbnailProps} from "app/interfaces";
 // import { useAuthStore } from 'stores/auth'
@@ -36,7 +41,8 @@ import { ref, onMounted } from 'vue';
 import { api } from 'boot/axios.js'
 const loading = ref<boolean>(true);
 // import ImageThumbnail from "components/ImageThumbnail.vue";
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 // import ImageThumbnail from "components/ImageThumbnail.vue";
 // import type { ThumbnailProps } from 'components/ImageThumbnail.vue';
 // const router = useRouter();
@@ -46,6 +52,23 @@ import type { APIResponseNovel } from "app/interfaces";
 import { apiResponseToNovelCoverProps } from "app/interfaces";
 
 const novels = ref<NovelCoverProps[]>([]);
+
+watch(() => uiConfigStore.language, (newLanguage) => {
+  if (debug) console.debug(`language was changed to ${newLanguage}`)
+  router.push({ path: `/novel-home/${uiConfigStore.language}` })
+    .then(() =>{
+      loadNovels()
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+});
+
+watch(() => router.currentRoute.value.params.language, (newLanguage) => {
+  if (newLanguage === undefined) return
+  if (debug) console.debug(`language was changed to ${newLanguage.toString()}`)
+  uiConfigStore.setLanguage(newLanguage as string)
+});
 
 function loadNovels() {
 

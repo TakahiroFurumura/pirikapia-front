@@ -21,11 +21,12 @@ const api = axios.create({
 });
 
 
-const authStore = useAuthStore();
+
 
 // request interceptor
 api.interceptors.request.use(req  => {
   if (debug) console.debug('request', req.url, req.method, req, api.defaults.headers)
+  const authStore = useAuthStore();
   if (req.headers.Authorization === undefined || api.defaults.headers.common.Authorization === null) {
     authStore.initializeAuthFromLocalStorage()
     if (authStore.accessToken) {
@@ -43,6 +44,7 @@ api.interceptors.response.use(
     if (debug) console.debug('response', res.request.responseURL, res.status, res)
     return res;
   }, async error => {
+    const authStore = useAuthStore();
 
 
       const originalRequest = error.config

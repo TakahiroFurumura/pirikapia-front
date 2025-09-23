@@ -20,22 +20,18 @@ const api = axios.create({
   // headers: { 'X-Custom-Header': 'foobar' }
 });
 
-const authStore = useAuthStore();
-authStore.initializeAuthFromLocalStorage()
 
+const authStore = useAuthStore();
 
 // request interceptor
 api.interceptors.request.use(req  => {
   if (debug) console.debug('request', req.url, req.method, req, api.defaults.headers)
-  /*
-  if (api.defaults.headers.common['Authorization'] == null) {
-    const authStore = useAuthStore();
+  if (req.headers.Authorization === undefined || api.defaults.headers.common.Authorization === null) {
     authStore.initializeAuthFromLocalStorage()
     if (authStore.accessToken) {
       req.headers['Authorization'] = `Bearer ${authStore.accessToken}`
     }
   }
-  */
   return req;
 }, err => {
   return Promise.reject(err);

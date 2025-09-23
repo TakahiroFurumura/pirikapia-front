@@ -20,10 +20,22 @@ const api = axios.create({
   // headers: { 'X-Custom-Header': 'foobar' }
 });
 
+const authStore = useAuthStore();
+authStore.initializeAuthFromLocalStorage()
+
 
 // request interceptor
 api.interceptors.request.use(req  => {
-  if (debug) console.debug('request', req.url, req.method, req)
+  if (debug) console.debug('request', req.url, req.method, req, api.defaults.headers)
+  /*
+  if (api.defaults.headers.common['Authorization'] == null) {
+    const authStore = useAuthStore();
+    authStore.initializeAuthFromLocalStorage()
+    if (authStore.accessToken) {
+      req.headers['Authorization'] = `Bearer ${authStore.accessToken}`
+    }
+  }
+  */
   return req;
 }, err => {
   return Promise.reject(err);
@@ -36,8 +48,7 @@ api.interceptors.response.use(
     return res;
   }, async error => {
 
-      const authStore = useAuthStore();
-      authStore.initializeAuthFromLocalStorage()
+
       const originalRequest = error.config
       // 401エラーで、かつ、まだリトライしていない場合
       if (error.response && error.response.status === 401 && !originalRequest._retry) {

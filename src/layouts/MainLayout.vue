@@ -212,6 +212,8 @@ onMounted(() => {
     .finally(() => {});
   uiConfigStore.language = navigator.language ? navigator.language : 'ja';
   if (debug) console.debug('language set to', uiConfigStore.language)
+
+  authStore.initializeAuthFromLocalStorage()
 });
 
 </script>

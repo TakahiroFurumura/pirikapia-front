@@ -38,6 +38,8 @@ import { ref, watch, onMounted } from 'vue';
 // import {apiResponseToThumbnailProps} from "app/interfaces";
 // import { useAuthStore } from 'stores/auth'
 // const authStore = useAuthStore()
+import { useRoute } from "vue-router";
+const route = useRoute();
 import { api } from 'boot/axios.js'
 const loading = ref<boolean>(true);
 // import ImageThumbnail from "components/ImageThumbnail.vue";
@@ -90,6 +92,10 @@ function loadNovels() {
 
 // --- ライフサイクルフック ---
 onMounted(() => {
+  if (debug) console.debug(route.params.novelId)
+  if (route.params.language !== undefined) {
+    uiConfigStore.language = route.params.language.toString()
+  }
   loadNovels()
 });
 </script>

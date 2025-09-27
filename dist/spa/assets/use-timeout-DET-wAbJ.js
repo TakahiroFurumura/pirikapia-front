@@ -1,1 +1,0 @@
-import{d as u}from"./use-router-link-CWDQuq44.js";import{i,o as m,d as s}from"./index-Dz4WaEOw.js";function f(){let e=null;const o=s();function t(){e!==null&&(clearTimeout(e),e=null)}return i(t),m(t),{removeTimeout:t,registerTimeout(n,r){t(),u(o)===!1&&(e=setTimeout(()=>{e=null,n()},r))}}}export{f as u};

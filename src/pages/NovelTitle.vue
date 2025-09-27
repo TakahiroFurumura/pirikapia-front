@@ -114,6 +114,9 @@ function loadNovels() {
 // --- ライフサイクルフック ---
 onMounted(() => {
   if (debug) console.debug(route.params.novelId)
+  if (route.params.language !== undefined) {
+    uiConfigStore.language = route.params.language.toString()
+  }
   loadNovels()
 });
 </script>

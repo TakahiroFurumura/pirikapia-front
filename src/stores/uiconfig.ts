@@ -3,7 +3,7 @@ import { defineStore, acceptHMRUpdate } from 'pinia';
 export const useUiConfigStore = defineStore('uiConfigStore', {
   state: () => ({
     debugMode: true,
-    language: "jp",
+    language: "ja",
   }),
   getters: {
     getLanguage: (state) => state.language,

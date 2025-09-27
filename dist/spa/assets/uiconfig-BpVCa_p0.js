@@ -1,1 +1,0 @@
-import{a9 as g}from"./index-rwAsQswM.js";const t=g("uiConfigStore",{state:()=>({debugMode:!0,language:"jp"}),getters:{getLanguage:e=>e.language,isDebugMode:e=>e.debugMode},actions:{setLanguage(e){this.language=e}}});export{t as u};

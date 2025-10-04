@@ -162,6 +162,7 @@ function removeSearchKeyword(index: number) {
 
 function selectImage(item: ThumbnailProps) {
   if (props.multiSelection) {
+    console.log('not yet')
   } else {
     selectedImage.value = [item]
     emit('imageSelected', selectedImage.value)

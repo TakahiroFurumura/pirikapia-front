@@ -1,6 +1,6 @@
 <template>
   <q-card flat class="q-ma-none q-pa-none" style="cursor: pointer;">
-    <router-link :to=linkToDetail()>
+    <router-link v-if="!disable_link" :to=linkToDetail()>
       <q-img
         :src="props.signed_url"
         :ratio="1/1"
@@ -11,17 +11,30 @@
             Failed to load...
           </div>
         </template>
-        <div
-          v-if="requires_login"
-          class="absolute-bottom text-center"
-          style="background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
-        >
-          <span class="text-caption">Login to unlock</span>
-        </div>
       </q-img>
     </router-link>
+    <div  v-if="disable_link">
+        <q-img
+          :src="props.signed_url"
+          :ratio="1/1"
+          style="position: relative;"
+        >
+          <template v-slot:error>
+            <div class="absolute-full flex flex-center bg-grey text-white">
+              Failed to load...
+            </div>
+          </template>
+        </q-img>
+      </div>
+    <div
+      v-if="requires_login"
+      class="absolute-bottom text-center"
+      style="background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
+    >
+      <span class="text-caption">Login to unlock</span>
+    </div>
     <q-separator/>
-    <q-card-actions align="left" class="q-mx-none q-pa-none q-my-none">
+    <q-card-actions v-if="show_buttons" align="left" class="q-mx-none q-pa-none q-my-none">
       <q-btn flat round size="md" :color="favoriteColor" :icon="favoriteIcon" class="q-ml-none" @click="addToBookmark"> {{ bookmarkCount }}</q-btn>
       <q-btn flat round size="md" color="primary" icon="comment" class="q-ml-sm"> {{ props.comment_count }}</q-btn>
       <div class="text-caption q-ml-sm">by {{ props.owner_username }}</div>
@@ -47,11 +60,15 @@ export interface ThumbnailProps {
   requires_login: boolean | undefined;
   bookmark: boolean | undefined;
   bookmark_count: number;
+  show_buttons?: boolean;
+  disable_link?: boolean;
 }
 const props = withDefaults(defineProps<ThumbnailProps>(), {
   title: '',
   bookmark_count: 0,
   comment_count: 0,
+  show_buttons: true,
+  disable_link: false
 });
 
 // const isMyFavorite = ref(false);

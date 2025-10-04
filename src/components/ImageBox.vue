@@ -114,16 +114,16 @@ const aspectRatio = computed(() => {
     return 1.0
   }
 })
-/*
-const imageDownloadLink = computed(() => {
-  if (imageData.value !== undefined && imageData.value !== null) {
-    return imageData.value.signed_url
-  } else {
-    return ""
-  }
-  }
-)
-*/
+
+watch(() => props.imageId, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    loadImageDetails()
+      .catch((err) => {
+        console.error(err)
+      })
+  }})
+
+
 // reactive fav
 const isMyBookmark = ref<boolean>(false);
 const justAddedToBookmark = ref<boolean>(false);
@@ -175,6 +175,7 @@ const loadImageDetails = async () => {
     loading.value = false;
   }
 };
+
 function addToBookmark() {
   if (isMyBookmark.value) {
     return

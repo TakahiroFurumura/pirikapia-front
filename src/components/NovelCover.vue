@@ -1,6 +1,11 @@
 <template>
   <div class="row bg-grey-2 q-pa-md" >
     <div class="col-12 mx-auto">
+      <div v-if="showOwnerMenu" class="q-mb-sm">
+        <span @click="changeTitleCoverDialog" style="cursor: pointer; width: auto;">
+          <q-icon name="image_search" size="medium"/><span class="q-ml-xs">change cover image</span>
+        </span>
+      </div>
       <router-link :to="`/novel-title/${props.novelId}/${uiConfigStore.language}`" style="text-decoration: none;">
         <ImageBox
             :imageId="props.coverImage"
@@ -45,6 +50,26 @@
       </div>
     </div>
   </div>
+
+  <q-dialog v-model="imageSelectDialog" maximized>
+    <q-card style="width: 700px; max-width: 80vw; max-height: 80vw;">
+      <q-card-section>
+        <div class="text-h6">Select new cover image</div>
+      </q-card-section>
+      <q-card-actions align="left" class="text-primary">
+        <q-btn flat label="Set image" v-close-popup @click="updateCoverImage"></q-btn>
+        <q-btn flat label="cancel" v-close-popup></q-btn>
+      </q-card-actions>
+
+      <q-card-section class="q-pt-none">
+        <ImageSelector
+          :owner-id="props.ownerId"
+          @imageSelected="handleImageSelected"
+        />
+      </q-card-section>
+
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup lang="ts">
@@ -54,12 +79,18 @@ const debug = uiConfigStore.isDebugMode
 if (debug) { console.debug('NovelCover loaded') }
 
 
+import type { ThumbnailProps } from 'components/ImageThumbnail.vue';
 import ImageBox from '../components/ImageBox.vue'
 import NovelCoverChapter from "components/NovelCoverChapter.vue";
 import type { NovelCoverChapterProps } from "components/NovelCoverChapter.vue";
+import ImageSelector from "components/ImageSelector.vue";
 
-import { computed } from "vue";
+import { ref, computed } from "vue";
 import { onMounted } from 'vue';
+
+import { api } from 'boot/axios';
+const imageSelectDialog = ref(false)
+const selectedImageId = ref('')
 
 const imageLinkTo = computed(() => {
   if (props.imageLinksToImageDetail) {
@@ -78,7 +109,8 @@ export interface NovelCoverProps {
   imageLinksToImageDetail?: boolean,
   ownerId: number,
   ownerUsername: string,
-  thumbnail?: boolean
+  thumbnail?: boolean,
+  showOwnerMenu?: boolean
 }
 
 const props = withDefaults(defineProps<NovelCoverProps>(), {
@@ -87,11 +119,45 @@ const props = withDefaults(defineProps<NovelCoverProps>(), {
   description: '',
   novelId: 0,
   imageLinksToImageDetail: false,
-  thumbnail: false
+  thumbnail: false,
+  showOwnerMenu: false
 });
+
+const emit = defineEmits<{
+  (e: 'imageUpdated'): void
+}>();
 
 function linkToChapter(chapterStrId: string) {
   return `/novel-chapter/${props.novelId}/${chapterStrId}/${uiConfigStore.language}`;
+}
+
+function changeTitleCoverDialog() {
+  if (debug) console.debug("changeTitleCoverDialog triggered");
+  imageSelectDialog.value = true
+}
+
+function handleImageSelected(selectedImages: ThumbnailProps[]) {
+  if (debug) console.debug(`handleImageSelected`);
+  if (selectedImages[0] !== undefined) {
+    if (debug) console.debug(selectedImages[0].image_id)
+    selectedImageId.value = selectedImages[0].image_id
+  }
+}
+
+function updateCoverImage() {
+  if (debug) console.debug(`updateCoverImage: ${selectedImageId.value}`);
+  api.post(`/novels/set-cover/title/${props.novelId}/${selectedImageId.value}/`)
+    .then(response => {
+      if (debug) console.debug(`${response.status} Cover image updated`);
+      // 成功した場合の通知
+      imageSelectDialog.value = false
+      emit('imageUpdated')
+    })
+    .catch(error => {
+      // 失敗した場合の通知
+      console.error('API Error:', error);
+      imageSelectDialog.value = false
+    })
 }
 
 onMounted(() => {

@@ -6,7 +6,7 @@
         label="owner view"
       ></q-toggle>
       </div>
-    <div class="col-12 q-ma-md bg-grey-2">
+    <div class="col-12 q-ma-md">
       <NovelCover
         :novelTitle="novel.novelTitle"
         :coverImage="novel.coverImage"
@@ -15,7 +15,9 @@
         :novelId="novel.novelId"
         :owner-id="novel.ownerId"
         :owner-username="novel.ownerUsername"
-        :imageLinksToImageDetail="true"
+        :imageLinksToImageDetail="false"
+        :show-owner-menu="showOwnerMenu"
+        @imageUpdated="loadNovel"
       ></NovelCover>
     </div>
   </q-page>
@@ -54,11 +56,11 @@ import { apiResponseToNovelCoverProps } from "app/interfaces";
 
 const novel = ref<NovelCoverProps>(
   {
-      novelTitle: "",
-      coverImage: "",
-      novelChapters: [],
-      description: "",
-      novelId: 0,
+    novelTitle: "",
+    coverImage: "",
+    novelChapters: [],
+    description: "",
+    novelId: 0,
     ownerId: 0,
     ownerUsername: ""
   }
@@ -73,20 +75,23 @@ const isOwner = computed(() => {
     return false
   }
 })
+
 watch(() => uiConfigStore.language, (newLanguage) => {
   if (debug) console.debug(`language was changed to ${newLanguage}`)
-  router.push({ path: `/novel-title/${uiConfigStore.language}` })
-    .then(() => {
-      loadNovels()
-    })
-    .catch((error) => {
-      console.error(error)
-    })
+  if (typeof route.params.novelId == "string") {
+    router.push({path: `/novel-title/${route.params.novelId}/${uiConfigStore.language}`})
+      .then(() => {
+        loadNovel()
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
 })
 
 const showOwnerMenu = ref<boolean>(false)
 
-function loadNovels() {
+function loadNovel() {
 
   if (typeof route.params.novelId == "string") {
     const url = `/novels/${route.params.novelId}/${uiConfigStore.language}/`
@@ -96,6 +101,12 @@ function loadNovels() {
         const rawItem = response.data as APIResponseNovel;
           console.debug(rawItem)
           novel.value = apiResponseToNovelCoverProps(rawItem)
+          // check if viewer is owner
+          if (debug) console.debug(authStore.user.pk)
+          if (novel.value.ownerId == authStore.user.pk) {
+            showOwnerMenu.value = true
+            if (debug) console.debug("owner view")
+          }
         })
       .catch((error) => {
         console.log(error)
@@ -114,10 +125,11 @@ function loadNovels() {
 // --- ライフサイクルフック ---
 onMounted(() => {
   if (debug) console.debug(route.params.novelId)
+
   if (route.params.language !== undefined) {
     uiConfigStore.language = route.params.language.toString()
   }
-  loadNovels()
+  loadNovel()
 });
 </script>
 

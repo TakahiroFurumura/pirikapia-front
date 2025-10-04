@@ -10,9 +10,11 @@
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
-          <q-toolbar-title style="cursor: pointer;" @click="toHome">
+        <q-toolbar-title style="cursor: pointer;">
+          <router-link to="/" style="text-decoration: none; color: inherit;">
             Pirikapia
-          </q-toolbar-title>
+          </router-link>
+        </q-toolbar-title>
         <q-item v-if="authStore.isAuthenticated" clickable @click="router.push('/user-profile')">
           <q-btn flat round dense icon="account_circle">
             <span class="q-ml-sm">{{authStore.user.username}}</span>
@@ -196,12 +198,6 @@ async function fetchWelcomeMessage() {
   } finally {
     isLoading.value = false;
   }
-}
-
-function toHome() {
-  router.push('/')
-    .then(() => {location.reload()})
-    .catch((error: unknown) => {console.log(error)})
 }
 
 // Call the function when the component is mounted

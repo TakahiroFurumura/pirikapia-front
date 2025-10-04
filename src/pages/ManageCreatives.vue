@@ -1,22 +1,10 @@
 <template>
   <q-page class="q-pa-sm">
 
-    <div class="q-pa-md flex flex-center">
-      <q-pagination
-        v-model="currentPage"
-        :max="maxPages"
-        input
-      ></q-pagination>
-    </div>
-
     <div v-if="showSearchCondition">
         <q-chip color="primary" text-color="white">
           {{route.query.tag}}
         </q-chip>
-    </div>
-    <div v-if="loading" class="text-center">
-      <q-spinner-gears size="50px" color="primary" />
-      <p>Loading...</p>
     </div>
 
     <div class="raw">
@@ -28,6 +16,17 @@
     </div>
 
     <div v-if="authStore.isAuthenticated">
+      <div v-if="loading" class="text-center">
+        <q-spinner-gears size="50px" color="primary" />
+        <p>Loading...</p>
+     </div>
+      <div class="q-pa-md flex flex-center">
+        <q-pagination
+          v-model="currentPage"
+          :max="maxPages"
+          input
+        ></q-pagination>
+      </div>
       <div v-if="error" class="text-negative text-center">
         <p>failed to load images {{ error.message }}</p>
         <q-btn label="reload" color="primary" @click="fetchThumbnails" />
@@ -59,12 +58,12 @@
           />
         </div>
       </div>
-    </div>
-    <div class="q-pa-md flex flex-center">
-      <q-pagination
-        v-model="currentPage"
-        :max="maxPages"
-      ></q-pagination>
+      <div class="q-pa-md flex flex-center">
+        <q-pagination
+          v-model="currentPage"
+          :max="maxPages"
+        ></q-pagination>
+      </div>
     </div>
   </q-page>
 </template>

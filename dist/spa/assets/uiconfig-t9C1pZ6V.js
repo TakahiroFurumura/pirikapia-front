@@ -1,0 +1,1 @@
+import{aa as a}from"./index-DIZdvslo.js";const t=a("uiConfigStore",{state:()=>({debugMode:!0,language:"ja"}),getters:{getLanguage:e=>e.language,isDebugMode:e=>e.debugMode},actions:{setLanguage(e){this.language=e}}});export{t as u};

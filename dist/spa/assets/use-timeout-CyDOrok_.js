@@ -1,0 +1,1 @@
+import{e as u}from"./use-router-link-B_O56vdA.js";import{b as i,f as m,g as s}from"./index-DIZdvslo.js";function f(){let e=null;const o=s();function t(){e!==null&&(clearTimeout(e),e=null)}return i(t),m(t),{removeTimeout:t,registerTimeout(n,r){t(),u(o)===!1&&(e=setTimeout(()=>{e=null,n()},r))}}}export{f as u};

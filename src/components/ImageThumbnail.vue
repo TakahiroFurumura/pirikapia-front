@@ -24,15 +24,15 @@
               Failed to load...
             </div>
           </template>
+          <div
+            v-if="requires_login"
+            class="absolute-bottom text-center"
+            style="background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
+          >
+            <span class="text-caption">Login to unlock</span>
+          </div>
         </q-img>
       </div>
-    <div
-      v-if="requires_login"
-      class="absolute-bottom text-center"
-      style="background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
-    >
-      <span class="text-caption">Login to unlock</span>
-    </div>
     <q-separator/>
     <q-card-actions v-if="show_buttons" align="left" class="q-mx-none q-pa-none q-my-none">
       <q-btn flat round size="md" :color="favoriteColor" :icon="favoriteIcon" class="q-ml-none" @click="addToBookmark"> {{ bookmarkCount }}</q-btn>

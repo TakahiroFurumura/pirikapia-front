@@ -16,7 +16,7 @@
       </template>
 
       <div
-        v-if="imageData?.requires_login"
+        v-if="imageData?.requires_login && !authStore.isAuthenticated"
         class="absolute-full text-subtitle1  flex flex-center"
         style="cursor: pointer; background-color: rgba(0, 0, 0, 0.3); color: white; padding: 2px;"
         @click="router.push('/user-login')"
